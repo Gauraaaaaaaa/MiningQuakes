@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "mining_quakes",
+  "version": "${version}",
+  "name": "Mining Quakes",
+  "description": "Adds tremors to blocks when mining!",
+  "authors": [
+    "Gaura"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+  "license": "ARR",
+  "icon": "assets/mining_quakes/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.gaura.mining_quakes.fabric.MiningQuakesFabric"
+    ],
+    "modmenu": [
+      "com.gaura.mining_quakes.fabric.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "mining_quakes.mixins.json",
+    "mining_quakes_fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.4",
+    "java": ">=21",
+    "architectury": ">=15.0.3",
+    "cloth-config": ">=17.0.144"
+  }
+}

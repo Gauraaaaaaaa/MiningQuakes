@@ -1,0 +1,7 @@
+{
+  "text.autoconfig.mining_quakes.title": "Mining Quakes",
+
+  "text.autoconfig.mining_quakes.option.lifetime": "Lifetime of the quake",
+  "text.autoconfig.mining_quakes.option.maxAngle": "Maximum angle of the quake",
+  "text.autoconfig.mining_quakes.option.oscillation": "Number of oscillations of the quake"
+}

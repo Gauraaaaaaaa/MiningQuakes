@@ -1,0 +1,38 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+issueTrackerURL = ""
+license = "ARR"
+
+[[mods]]
+modId = "mining_quakes"
+version = "${version}"
+displayName = "Mining Quakes"
+authors = "Gaura"
+description = '''Adds tremors to blocks when mining!'''
+logoFile = "assets/mining_quakes/icon.png"
+
+[[dependencies.mining_quakes]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mining_quakes]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mining_quakes]]
+modId = "architectury"
+type = "required"
+versionRange = "[15.0.3,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "mining_quakes.mixins.json"
+[[mixins]]
+config = "mining_quakes_neoforge.mixins.json"
