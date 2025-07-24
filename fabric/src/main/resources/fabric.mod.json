@@ -8,8 +8,9 @@
     "Gaura"
   ],
   "contact": {
-    "homepage": "",
-    "sources": ""
+    "homepage": "https://modrinth.com/mod/mining-quakes",
+    "sources": "https://github.com/Gauraaaaaaaa/MiningQuakes",
+    "issues": "https://github.com/Gauraaaaaaaa/MiningQuakes/issues"
   },
   "license": "ARR",
   "icon": "assets/mining_quakes/icon.png",

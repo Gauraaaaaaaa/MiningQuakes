@@ -83,8 +83,8 @@ public class BlockQuakeParticle extends Particle {
 
         float t = (this.age + f) / this.lifetime;
         float maxAngle = MiningQuakes.CONFIG.maxAngle;
-        float baseOscillation = Mth.sin(MiningQuakes.CONFIG.oscillation * Mth.PI * t);
-        float decay = Mth.cos(t * Mth.PI / 2);
+        float baseOscillation = (float) Math.sin(MiningQuakes.CONFIG.oscillation * Math.PI * t);
+        float decay = MiningQuakes.CONFIG.easingFunction.apply(t);
         float angle = maxAngle * baseOscillation * decay;
 
         poseStack.translate(0.5F, 0.5F, 0.5F);
