@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,8 +29,23 @@ public class MultiPlayerGameModeMixin {
         if (clientLevel != null) {
 
             BlockState blockState = clientLevel.getBlockState(blockPos);
-
             BlockQuakeParticleManager.removeQuakeAnimation(clientLevel, blockPos, blockState);
+
+            if (blockState.getBlock() instanceof DoorBlock) {
+
+                DoubleBlockHalf doubleBlockHalf = blockState.getValue(DoorBlock.HALF);
+
+                if (doubleBlockHalf == DoubleBlockHalf.LOWER) {
+
+                    BlockState aboveBlockState = clientLevel.getBlockState(blockPos.above());
+                    BlockQuakeParticleManager.removeQuakeAnimation(clientLevel, blockPos.above(), aboveBlockState);
+                }
+                else if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
+
+                    BlockState belowBlockState = clientLevel.getBlockState(blockPos.below());
+                    BlockQuakeParticleManager.removeQuakeAnimation(clientLevel, blockPos.below(), belowBlockState);
+                }
+            }
         }
     }
 
@@ -38,13 +54,25 @@ public class MultiPlayerGameModeMixin {
 
         ClientLevel clientLevel = this.minecraft.level;
 
-        if (clientLevel != null) {
+        if (clientLevel != null && !BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
 
             BlockState blockState = clientLevel.getBlockState(blockPos);
+            BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos, blockState);
 
-            if (!(blockState.getBlock() instanceof DoorBlock) && !BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
+            if (blockState.getBlock() instanceof DoorBlock) {
 
-                BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos, blockState);
+                DoubleBlockHalf doubleBlockHalf = blockState.getValue(DoorBlock.HALF);
+
+                if (doubleBlockHalf == DoubleBlockHalf.LOWER) {
+
+                    BlockState aboveBlockState = clientLevel.getBlockState(blockPos.above());
+                    BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos.above(), aboveBlockState);
+                }
+                else if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
+
+                    BlockState belowBlockState = clientLevel.getBlockState(blockPos.below());
+                    BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos.below(), belowBlockState);
+                }
             }
         }
     }
