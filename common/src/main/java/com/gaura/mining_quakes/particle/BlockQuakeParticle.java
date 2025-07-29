@@ -16,8 +16,8 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.BlockDestructionProgress;
@@ -26,15 +26,15 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.SortedSet;
 
 public class BlockQuakeParticle extends Particle {
 
     private final BlockPos blockPos;
     private final BlockState blockState;
-    private final BakedModel bakedModel;
+    private final List<BlockModelPart> blockModelParts;
     private final ModelBlockRenderer modelBlockRenderer;
-    private final RandomSource source;
 
     public BlockQuakeParticle(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState) {
 
@@ -46,9 +46,9 @@ public class BlockQuakeParticle extends Particle {
 
         this.blockPos = blockPos;
         this.blockState = blockState;
-        this.bakedModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
+        RandomSource randomSource = RandomSource.create(this.blockState.getSeed(this.blockPos));
+        this.blockModelParts = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState).collectParts(randomSource);
         this.modelBlockRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
-        this.source = RandomSource.create();
     }
 
     @Override
@@ -98,14 +98,12 @@ public class BlockQuakeParticle extends Particle {
 
         this.modelBlockRenderer.tesselateBlock(
                 this.level,
-                this.bakedModel,
+                this.blockModelParts,
                 this.blockState,
                 this.blockPos,
                 poseStack,
                 multiBufferSource.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType(this.blockState)),
                 false,
-                this.source,
-                this.blockState.getSeed(this.blockPos),
                 OverlayTexture.NO_OVERLAY
         );
 
@@ -116,14 +114,12 @@ public class BlockQuakeParticle extends Particle {
 
             this.modelBlockRenderer.tesselateBlock(
                     this.level,
-                    this.bakedModel,
+                    this.blockModelParts,
                     this.blockState,
                     this.blockPos,
                     poseStack,
                     new SheetedDecalTextureGenerator(multiBufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(progressSet.last().getProgress())), poseStack.last(), 1.0F),
                     true,
-                    this.source,
-                    this.blockState.getSeed(this.blockPos),
                     OverlayTexture.NO_OVERLAY
             );
         }

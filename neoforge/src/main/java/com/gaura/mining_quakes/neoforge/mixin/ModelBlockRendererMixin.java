@@ -6,7 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,36 +15,36 @@ import org.spongepowered.asm.mixin.injection.At;
 public class ModelBlockRendererMixin {
 
     @WrapOperation(
-            method = "tesselateWithAO(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JILnet/neoforged/neoforge/client/model/data/ModelData;Lnet/minecraft/client/renderer/RenderType;)V",
+            method = "tesselateWithAO(Lnet/minecraft/world/level/BlockAndTintGetter;Ljava/util/List;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/function/Function;ZI)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/block/Block;shouldRenderFace(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;)Z"
+                    target = "Lnet/minecraft/client/renderer/block/ModelBlockRenderer;shouldRenderFace(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;ZLnet/minecraft/core/Direction;Lnet/minecraft/core/BlockPos;)Z"
             )
     )
-    private boolean onTesselateWithAO(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, BlockState blockState2, Direction direction, Operation<Boolean> original) {
+    private boolean onTesselateWithAO(BlockAndTintGetter blockAndTintGetter, BlockPos blockPos, BlockState blockState, boolean bl, Direction direction, BlockPos searchPos, Operation<Boolean> original) {
 
-        if (BlockQuakeParticleManager.isBlockInvisible(blockPos.relative(direction))) {
+        if (BlockQuakeParticleManager.isBlockInvisible(searchPos)) {
 
             return true;
         }
 
-        return original.call(blockGetter, blockPos, blockState, blockState2, direction);
+        return original.call(blockAndTintGetter, blockPos, blockState, bl, direction, searchPos);
     }
 
     @WrapOperation(
-            method = "tesselateWithoutAO(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JILnet/neoforged/neoforge/client/model/data/ModelData;Lnet/minecraft/client/renderer/RenderType;)V",
+            method = "tesselateWithoutAO(Lnet/minecraft/world/level/BlockAndTintGetter;Ljava/util/List;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/function/Function;ZI)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/block/Block;shouldRenderFace(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;)Z"
+                    target = "Lnet/minecraft/client/renderer/block/ModelBlockRenderer;shouldRenderFace(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;ZLnet/minecraft/core/Direction;Lnet/minecraft/core/BlockPos;)Z"
             )
     )
-    private boolean onTesselateWithoutAO(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, BlockState blockState2, Direction direction, Operation<Boolean> original) {
+    private boolean onTesselateWithoutAO(BlockAndTintGetter blockAndTintGetter, BlockPos blockPos, BlockState blockState, boolean bl, Direction direction, BlockPos searchPos, Operation<Boolean> original) {
 
-        if (BlockQuakeParticleManager.isBlockInvisible(blockPos.relative(direction))) {
+        if (BlockQuakeParticleManager.isBlockInvisible(searchPos)) {
 
             return true;
         }
 
-        return original.call(blockGetter, blockPos, blockState, blockState2, direction);
+        return original.call(blockAndTintGetter, blockPos, blockState, bl, direction, searchPos);
     }
 }
