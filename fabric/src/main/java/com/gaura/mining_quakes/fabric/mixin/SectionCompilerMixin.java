@@ -1,6 +1,8 @@
 package com.gaura.mining_quakes.fabric.mixin;
 
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.renderer.chunk.SectionCompiler;
 import net.minecraft.core.BlockPos;
@@ -13,37 +15,37 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(SectionCompiler.class)
 public class SectionCompilerMixin {
 
-    @Redirect(
+    @WrapOperation(
             method = "compile",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/level/block/state/BlockState;getRenderShape()Lnet/minecraft/world/level/block/RenderShape;"
             )
     )
-    private RenderShape onGetRenderShape(BlockState blockState, @Local(ordinal = 2) BlockPos blockPos) {
+    private RenderShape onGetRenderShape(BlockState blockState, Operation<RenderShape> original, @Local(ordinal = 2) BlockPos blockPos) {
 
-        if (blockState.getRenderShape() != RenderShape.INVISIBLE && BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
+        if (original.call(blockState) != RenderShape.INVISIBLE && BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
 
             return RenderShape.INVISIBLE;
         }
 
-        return blockState.getRenderShape();
+        return original.call(blockState);
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "compile",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/level/block/state/BlockState;isSolidRender()Z"
             )
     )
-    private boolean onIsSolidRender(BlockState instance, @Local(ordinal = 2) BlockPos blockPos) {
+    private boolean onIsSolidRender(BlockState blockState, Operation<Boolean> original, @Local(ordinal = 2) BlockPos blockPos) {
 
-        if (instance.isSolidRender() && BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
+        if (original.call(blockState) && BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
 
             return false;
         }
 
-        return instance.isSolidRender();
+        return original.call(blockState);
     }
 }
