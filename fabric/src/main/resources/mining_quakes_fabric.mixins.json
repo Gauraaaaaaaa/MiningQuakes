@@ -6,7 +6,8 @@
   "client": [
     "BlockRenderInfoMixin",
     "LevelRendererMixin",
-    "SectionCompilerMixin"
+    "SectionCompilerMixin",
+    "TerrainRenderContextMixin"
   ],
   "injectors": {
     "defaultRequire": 1
