@@ -15,7 +15,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -33,7 +33,8 @@ public class BlockQuakeParticle extends Particle {
     private final BlockPos blockPos;
     private final BlockState blockState;
     private final BakedModel bakedModel;
-    private final RandomSource source = RandomSource.create();
+    private final ModelBlockRenderer modelBlockRenderer;
+    private final RandomSource source;
 
     public BlockQuakeParticle(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState) {
 
@@ -46,6 +47,8 @@ public class BlockQuakeParticle extends Particle {
         this.blockPos = blockPos;
         this.blockState = blockState;
         this.bakedModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
+        this.modelBlockRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+        this.source = RandomSource.create();
     }
 
     @Override
@@ -93,9 +96,7 @@ public class BlockQuakeParticle extends Particle {
 
         poseStack.translate(-0.5F, -0.5F, -0.5F);
 
-        BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
-
-        blockRenderer.getModelRenderer().tesselateBlock(
+        this.modelBlockRenderer.tesselateBlock(
                 this.level,
                 this.bakedModel,
                 this.blockState,
@@ -113,7 +114,7 @@ public class BlockQuakeParticle extends Particle {
 
         if (progressSet != null && !progressSet.isEmpty()) {
 
-            blockRenderer.getModelRenderer().tesselateBlock(
+            this.modelBlockRenderer.tesselateBlock(
                     this.level,
                     this.bakedModel,
                     this.blockState,

@@ -26,13 +26,6 @@ versionRange = "[1.21.4,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.mining_quakes]]
-modId = "architectury"
-type = "required"
-versionRange = "[15.0.3,)"
-ordering = "AFTER"
-side = "BOTH"
-
 [[mixins]]
 config = "mining_quakes.mixins.json"
 [[mixins]]
