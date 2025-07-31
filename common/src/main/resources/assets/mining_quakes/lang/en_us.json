@@ -1,8 +1,11 @@
 {
   "text.autoconfig.mining_quakes.title": "Mining Quakes",
 
-  "text.autoconfig.mining_quakes.option.lifetime": "Lifetime of the quake",
-  "text.autoconfig.mining_quakes.option.maxAngle": "Maximum angle of the quake",
-  "text.autoconfig.mining_quakes.option.oscillation": "Number of oscillations of the quake",
+  "text.autoconfig.mining_quakes.option.lifetime": "Lifetime of the quake (in ticks)",
+  "text.autoconfig.mining_quakes.option.horizontalMaxAngle": "Maximum horizontal angle of the quake",
+  "text.autoconfig.mining_quakes.option.verticalMaxAngle": "Maximum vertical angle of the quake",
+  "text.autoconfig.mining_quakes.option.horizontalOscillations": "Number of horizontal oscillations of the quake",
+  "text.autoconfig.mining_quakes.option.verticalOscillations": "Number of vertical oscillations of the quake",
+  "text.autoconfig.mining_quakes.option.randomQuakes": "Enable random quakes",
   "text.autoconfig.mining_quakes.option.easingFunction": "Easing function of the quake"
 }

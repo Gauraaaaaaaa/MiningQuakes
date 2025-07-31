@@ -20,23 +20,44 @@ import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.BlockDestructionProgress;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 
 public class BlockQuakeParticle extends Particle {
 
     private final BlockPos blockPos;
     private final BlockState blockState;
+    private final Direction direction;
+    private final boolean isDoorBlock;
+
     private final List<BlockModelPart> blockModelParts;
     private final ModelBlockRenderer modelBlockRenderer;
 
-    public BlockQuakeParticle(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState) {
+    private final int randomHorizontal;
+    private final int randomVertical;
+
+    record RotationPair(Axis horizontalAxis, Axis verticalAxis) {}
+
+    static final Map<Direction, RotationPair> ROTATIONS = Map.of(
+            Direction.SOUTH, new RotationPair(Axis.ZP, Axis.YP),
+            Direction.NORTH, new RotationPair(Axis.ZN, Axis.YP),
+            Direction.EAST,  new RotationPair(Axis.XP, Axis.YP),
+            Direction.WEST,  new RotationPair(Axis.XN, Axis.YP),
+            Direction.DOWN,  new RotationPair(Axis.XP, Axis.ZP),
+            Direction.UP,    new RotationPair(Axis.XN, Axis.ZP)
+    );
+
+    public BlockQuakeParticle(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState, Direction direction, boolean isDoorBlock, int randomHorizontal, int randomVertical) {
 
         super(clientLevel, blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
@@ -46,9 +67,15 @@ public class BlockQuakeParticle extends Particle {
 
         this.blockPos = blockPos;
         this.blockState = blockState;
+        this.direction = direction;
+        this.isDoorBlock = isDoorBlock;
+
         RandomSource randomSource = RandomSource.create(this.blockState.getSeed(this.blockPos));
         this.blockModelParts = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState).collectParts(randomSource);
         this.modelBlockRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+
+        this.randomHorizontal = randomHorizontal;
+        this.randomVertical = randomVertical;
     }
 
     @Override
@@ -85,16 +112,27 @@ public class BlockQuakeParticle extends Particle {
         poseStack.translate(x, y, z);
 
         float t = (this.age + f) / this.lifetime;
-        float maxAngle = MiningQuakes.CONFIG.maxAngle;
-        float baseOscillation = (float) Math.sin(MiningQuakes.CONFIG.oscillation * Math.PI * t);
+        float horizontalOscillations = (float) Math.sin(MiningQuakes.CONFIG.horizontalOscillations * Math.PI * t);
+        float verticalOscillations = (float) Math.sin(MiningQuakes.CONFIG.verticalOscillations * Math.PI * t);
         float decay = MiningQuakes.CONFIG.easingFunction.apply(t);
-        float angle = maxAngle * baseOscillation * decay;
+        float horizontalAngle = MiningQuakes.CONFIG.horizontalMaxAngle * horizontalOscillations * decay;
+        float verticalAngle = MiningQuakes.CONFIG.verticalMaxAngle * verticalOscillations * decay;
 
-        poseStack.translate(0.5F, 0.5F, 0.5F);
+        if (MiningQuakes.CONFIG.randomQuakes) {
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(angle));
+            horizontalAngle *= this.randomHorizontal;
+            verticalAngle *= this.randomVertical;
+        }
 
-        poseStack.translate(-0.5F, -0.5F, -0.5F);
+        float yOffset = this.isDoorBlock ? (this.blockState.getValue(DoorBlock.HALF) == DoubleBlockHalf.LOWER ? 1.0F : 0.0F) : 0.5F;
+        RotationPair rotation = ROTATIONS.get(this.direction);
+
+        poseStack.translate(0.5F, yOffset, 0.5F);
+
+        poseStack.mulPose(rotation.horizontalAxis.rotationDegrees(verticalAngle));
+        poseStack.mulPose(rotation.verticalAxis.rotationDegrees(horizontalAngle));
+
+        poseStack.translate(-0.5F, -yOffset, -0.5F);
 
         this.modelBlockRenderer.tesselateBlock(
                 this.level,
