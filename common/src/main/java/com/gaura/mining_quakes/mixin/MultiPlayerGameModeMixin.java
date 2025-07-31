@@ -40,7 +40,7 @@ public class MultiPlayerGameModeMixin {
                     BlockState aboveBlockState = clientLevel.getBlockState(blockPos.above());
                     BlockQuakeParticleManager.removeQuakeAnimation(clientLevel, blockPos.above(), aboveBlockState);
                 }
-                else if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
+                else {
 
                     BlockState belowBlockState = clientLevel.getBlockState(blockPos.below());
                     BlockQuakeParticleManager.removeQuakeAnimation(clientLevel, blockPos.below(), belowBlockState);
@@ -57,22 +57,27 @@ public class MultiPlayerGameModeMixin {
         if (clientLevel != null && !BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
 
             BlockState blockState = clientLevel.getBlockState(blockPos);
-            BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos, blockState);
 
             if (blockState.getBlock() instanceof DoorBlock) {
+
+                BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos, blockState, direction, true);
 
                 DoubleBlockHalf doubleBlockHalf = blockState.getValue(DoorBlock.HALF);
 
                 if (doubleBlockHalf == DoubleBlockHalf.LOWER) {
 
                     BlockState aboveBlockState = clientLevel.getBlockState(blockPos.above());
-                    BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos.above(), aboveBlockState);
+                    BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos.above(), aboveBlockState, direction, true);
                 }
-                else if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
+                else {
 
                     BlockState belowBlockState = clientLevel.getBlockState(blockPos.below());
-                    BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos.below(), belowBlockState);
+                    BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos.below(), belowBlockState, direction, true);
                 }
+            }
+            else {
+
+                BlockQuakeParticleManager.addQuakeAnimation(clientLevel, blockPos, blockState, direction, false);
             }
         }
     }

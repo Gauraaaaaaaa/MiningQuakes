@@ -3,6 +3,8 @@ package com.gaura.mining_quakes.particle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -17,9 +19,9 @@ public class BlockQuakeParticleManager {
 
     private static final Set<BlockPos> INVISIBLE_BLOCKS = new CopyOnWriteArraySet<>();
 
-    public static void addQuakeAnimation(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState) {
+    public static void addQuakeAnimation(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState, Direction direction, boolean isDoorBlock) {
 
-        BlockQuakeParticle blockQuakeParticle = new BlockQuakeParticle(clientLevel, blockPos, blockState);
+        BlockQuakeParticle blockQuakeParticle = new BlockQuakeParticle(clientLevel, blockPos, blockState, direction, isDoorBlock);
 
         BlockQuakeParticle previousBlockQuakeParticle = BLOCK_QUAKE_PARTICLES.put(blockPos, blockQuakeParticle);
 

@@ -41,7 +41,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    modCompileOnly modRuntimeOnly("maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-fabric") {
+    modCompileOnly ("maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-fabric") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 }
