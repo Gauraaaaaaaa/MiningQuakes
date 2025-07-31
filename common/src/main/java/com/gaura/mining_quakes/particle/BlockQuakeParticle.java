@@ -57,7 +57,7 @@ public class BlockQuakeParticle extends Particle {
             Direction.UP,    new RotationPair(Axis.XN, Axis.ZP)
     );
 
-    public BlockQuakeParticle(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState, Direction direction, boolean isDoorBlock) {
+    public BlockQuakeParticle(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState, Direction direction, boolean isDoorBlock, int randomHorizontal, int randomVertical) {
 
         super(clientLevel, blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
@@ -74,8 +74,8 @@ public class BlockQuakeParticle extends Particle {
         this.modelBlockRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
         this.source = RandomSource.create();
 
-        this.randomHorizontal = RandomSource.create().nextBoolean() ? 1 : -1;
-        this.randomVertical = RandomSource.create().nextBoolean() ? 1 : -1;
+        this.randomHorizontal = randomHorizontal;
+        this.randomVertical = randomVertical;
     }
 
     @Override
