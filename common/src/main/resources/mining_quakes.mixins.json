@@ -1,13 +1,19 @@
 {
   "required": true,
   "package": "com.gaura.mining_quakes.mixin",
+  "plugin": "com.gaura.mining_quakes.config.MiningQuakesMixinConfigPlugin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
+    "BlockRenderDispatcherMixin",
     "ClientLevelAccessor",
     "LevelRendererAccessor",
+    "LevelRendererBlockEntitiesMixin",
     "LevelRendererMixin",
-    "MultiPlayerGameModeMixin"
+    "MultiPlayerGameModeMixin",
+    "sodium.BlockOcclusionCacheMixin",
+    "sodium.BlockRendererMixin",
+    "sodium.SodiumWorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

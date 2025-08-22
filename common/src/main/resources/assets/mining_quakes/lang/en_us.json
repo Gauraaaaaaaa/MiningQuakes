@@ -6,6 +6,8 @@
   "text.autoconfig.mining_quakes.option.verticalMaxAngle": "Maximum vertical angle of the quake",
   "text.autoconfig.mining_quakes.option.horizontalOscillations": "Number of horizontal oscillations of the quake",
   "text.autoconfig.mining_quakes.option.verticalOscillations": "Number of vertical oscillations of the quake",
+  "text.autoconfig.mining_quakes.option.easingFunction": "Easing function of the quake",
+  "text.autoconfig.mining_quakes.option.renderOutline": "Render block outline",
   "text.autoconfig.mining_quakes.option.randomQuakes": "Enable random quakes",
-  "text.autoconfig.mining_quakes.option.easingFunction": "Easing function of the quake"
+  "text.autoconfig.mining_quakes.option.blacklist": "Blacklisted blocks"
 }

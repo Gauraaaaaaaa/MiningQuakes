@@ -3,7 +3,7 @@
   "id": "mining_quakes",
   "version": "${version}",
   "name": "Mining Quakes",
-  "description": "Adds tremors to blocks when mining!",
+  "description": "Adds shakes to blocks when destroying!",
   "authors": [
     "Gaura"
   ],
@@ -12,11 +12,11 @@
     "sources": "https://github.com/Gauraaaaaaaa/MiningQuakes",
     "issues": "https://github.com/Gauraaaaaaaa/MiningQuakes/issues"
   },
-  "license": "ARR",
+  "license": "GPL-3.0",
   "icon": "assets/mining_quakes/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "com.gaura.mining_quakes.fabric.MiningQuakesFabric"
     ],
     "modmenu": [

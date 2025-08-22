@@ -1,5 +1,6 @@
 package com.gaura.mining_quakes.particle;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -18,13 +19,13 @@ public class BlockQuakeParticleManager {
 
     private static final Set<BlockPos> INVISIBLE_BLOCKS = new CopyOnWriteArraySet<>();
 
-    public static void addQuakeAnimation(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState, Direction direction, boolean isDoorBlock, int randomHorizontal, int randomVertical) {
+    public static void addQuakeAnimation(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState, Direction direction, int randomHorizontal, int randomVertical) {
 
-        BlockQuakeParticle blockQuakeParticle = new BlockQuakeParticle(clientLevel, blockPos, blockState, direction, isDoorBlock, randomHorizontal, randomVertical);
+        BlockQuakeParticle blockQuakeParticle = new BlockQuakeParticle(clientLevel, blockPos, blockState, direction, randomHorizontal, randomVertical);
 
         BlockQuakeParticle previousBlockQuakeParticle = BLOCK_QUAKE_PARTICLES.put(blockPos, blockQuakeParticle);
 
-        if (previousBlockQuakeParticle != null) {
+        if (previousBlockQuakeParticle != null && previousBlockQuakeParticle.isAlive()) {
 
             previousBlockQuakeParticle.remove();
         }
@@ -34,11 +35,21 @@ public class BlockQuakeParticleManager {
         setBlockInvisible(clientLevel, blockPos, blockState);
     }
 
+    public static void addQuake(BlockPos blockPos, PoseStack poseStack, float f) {
+
+        BlockQuakeParticle blockQuakeParticle = BLOCK_QUAKE_PARTICLES.get(blockPos);
+
+        if (blockQuakeParticle != null && blockQuakeParticle.isAlive()) {
+
+            blockQuakeParticle.animate(poseStack, f);
+        }
+    }
+
     public static void removeQuakeAnimation(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState) {
 
         BlockQuakeParticle blockQuakeParticle = BLOCK_QUAKE_PARTICLES.remove(blockPos);
 
-        if (blockQuakeParticle != null) {
+        if (blockQuakeParticle != null && blockQuakeParticle.isAlive()) {
 
             blockQuakeParticle.remove();
         }

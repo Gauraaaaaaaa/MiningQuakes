@@ -24,9 +24,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.BlockDestructionProgress;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -38,10 +41,11 @@ public class BlockQuakeParticle extends Particle {
     private final BlockPos blockPos;
     private final BlockState blockState;
     private final Direction direction;
-    private final boolean isDoorBlock;
 
     private final List<BlockModelPart> blockModelParts;
     private final ModelBlockRenderer modelBlockRenderer;
+
+    private Vec3 pivotPoint;
 
     private final int randomHorizontal;
     private final int randomVertical;
@@ -57,7 +61,7 @@ public class BlockQuakeParticle extends Particle {
             Direction.UP,    new RotationPair(Axis.XN, Axis.ZP)
     );
 
-    public BlockQuakeParticle(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState, Direction direction, boolean isDoorBlock, int randomHorizontal, int randomVertical) {
+    public BlockQuakeParticle(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState, Direction direction, int randomHorizontal, int randomVertical) {
 
         super(clientLevel, blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
@@ -68,11 +72,25 @@ public class BlockQuakeParticle extends Particle {
         this.blockPos = blockPos;
         this.blockState = blockState;
         this.direction = direction;
-        this.isDoorBlock = isDoorBlock;
 
         RandomSource randomSource = RandomSource.create(this.blockState.getSeed(this.blockPos));
         this.blockModelParts = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState).collectParts(randomSource);
         this.modelBlockRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+
+        this.pivotPoint = new Vec3(0.5, 0.5, 0.5);
+
+        if (blockState.getBlock() instanceof DoorBlock) {
+
+            this.pivotPoint = this.pivotPoint.relative(blockState.getValue(DoorBlock.HALF).getDirectionToOther(), 0.5);
+        }
+        else if (blockState.getBlock() instanceof ChestBlock && blockState.getValue(ChestBlock.TYPE) != ChestType.SINGLE) {
+
+            this.pivotPoint = this.pivotPoint.relative(ChestBlock.getConnectedDirection(blockState), 0.5);
+        }
+        else if (blockState.getBlock() instanceof BedBlock) {
+
+            this.pivotPoint = this.pivotPoint.relative(BedBlock.getConnectedDirection(blockState), 0.5);
+        }
 
         this.randomHorizontal = randomHorizontal;
         this.randomVertical = randomVertical;
@@ -111,28 +129,7 @@ public class BlockQuakeParticle extends Particle {
 
         poseStack.translate(x, y, z);
 
-        float t = (this.age + f) / this.lifetime;
-        float horizontalOscillations = (float) Math.sin(MiningQuakes.CONFIG.horizontalOscillations * Math.PI * t);
-        float verticalOscillations = (float) Math.sin(MiningQuakes.CONFIG.verticalOscillations * Math.PI * t);
-        float decay = MiningQuakes.CONFIG.easingFunction.apply(t);
-        float horizontalAngle = MiningQuakes.CONFIG.horizontalMaxAngle * horizontalOscillations * decay;
-        float verticalAngle = MiningQuakes.CONFIG.verticalMaxAngle * verticalOscillations * decay;
-
-        if (MiningQuakes.CONFIG.randomQuakes) {
-
-            horizontalAngle *= this.randomHorizontal;
-            verticalAngle *= this.randomVertical;
-        }
-
-        float yOffset = this.isDoorBlock ? (this.blockState.getValue(DoorBlock.HALF) == DoubleBlockHalf.LOWER ? 1.0F : 0.0F) : 0.5F;
-        RotationPair rotation = ROTATIONS.get(this.direction);
-
-        poseStack.translate(0.5F, yOffset, 0.5F);
-
-        poseStack.mulPose(rotation.horizontalAxis.rotationDegrees(verticalAngle));
-        poseStack.mulPose(rotation.verticalAxis.rotationDegrees(horizontalAngle));
-
-        poseStack.translate(-0.5F, -yOffset, -0.5F);
+        this.animate(poseStack, f);
 
         this.modelBlockRenderer.tesselateBlock(
                 this.level,
@@ -163,6 +160,31 @@ public class BlockQuakeParticle extends Particle {
         }
 
         poseStack.popPose();
+    }
+
+    public void animate(PoseStack poseStack, float f) {
+
+        float t = (this.age + f) / this.lifetime;
+        float horizontalOscillations = (float) Math.sin(MiningQuakes.CONFIG.horizontalOscillations * Math.PI * t);
+        float verticalOscillations = (float) Math.sin(MiningQuakes.CONFIG.verticalOscillations * Math.PI * t);
+        float decay = MiningQuakes.CONFIG.easingFunction.apply(t);
+        float horizontalAngle = MiningQuakes.CONFIG.horizontalMaxAngle * horizontalOscillations * decay;
+        float verticalAngle = MiningQuakes.CONFIG.verticalMaxAngle * verticalOscillations * decay;
+
+        if (MiningQuakes.CONFIG.randomQuakes) {
+
+            horizontalAngle *= this.randomHorizontal;
+            verticalAngle *= this.randomVertical;
+        }
+
+        RotationPair rotation = ROTATIONS.get(this.direction);
+
+        poseStack.translate(this.pivotPoint);
+
+        poseStack.mulPose(rotation.horizontalAxis.rotationDegrees(verticalAngle));
+        poseStack.mulPose(rotation.verticalAxis.rotationDegrees(horizontalAngle));
+
+        poseStack.translate(this.pivotPoint.reverse());
     }
 
     @Override
