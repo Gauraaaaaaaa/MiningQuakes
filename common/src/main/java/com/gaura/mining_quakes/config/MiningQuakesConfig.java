@@ -12,7 +12,11 @@ public class MiningQuakesConfig implements ConfigData {
     public float verticalMaxAngle = 15.0F;
     public int horizontalOscillations = 3;
     public int verticalOscillations = 2;
-    public boolean randomQuakes = true;
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public EasingFunction easingFunction = EasingFunction.EASE_IN_OUT;
+    public boolean renderOutline = true;
+    public boolean randomQuakes = true;
+    public String[] blacklist = {
+            "minecraft:tall_grass"
+    };
 }
