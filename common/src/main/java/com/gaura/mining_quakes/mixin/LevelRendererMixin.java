@@ -2,40 +2,50 @@ package com.gaura.mining_quakes.mixin;
 
 import com.gaura.mining_quakes.MiningQuakes;
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
 
-    @Inject(method = "renderHitOutline", at = @At("HEAD"), cancellable = true)
-    private void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, Entity entity, double x, double y, double z, BlockPos blockPos, BlockState blockState, int i, CallbackInfo ci) {
+    @WrapOperation(
+            method = "renderHitOutline",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/LevelRenderer;renderShape(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/shapes/VoxelShape;DDDFFFF)V"
+            )
+    )
+    private void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, VoxelShape voxelShape, double x, double y, double z, float g, float h, float i, float j, Operation<Void> original, @Local(argsOnly = true) BlockPos blockPos) {
 
         if (BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
 
             if (MiningQuakes.CONFIG.renderOutline) {
 
-                Vec3 center = new Vec3(blockPos.getX() - x, blockPos.getY() - y, blockPos.getZ() - z);
-                float f = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
+                float f = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
 
-                poseStack.translate(center);
+                poseStack.pushPose();
+
+                poseStack.translate(x, y, z);
                 BlockQuakeParticleManager.addQuake(blockPos, poseStack, f);
-                poseStack.translate(center.reverse());
-            }
-            else {
+                poseStack.translate(-x, -y, -z);
 
-                ci.cancel();
+                original.call(poseStack, vertexConsumer, voxelShape, x, y, z, g, h, i, j);
+
+                poseStack.popPose();
             }
+        }
+        else {
+
+            original.call(poseStack, vertexConsumer, voxelShape, x, y, z, g, h, i, j);
         }
     }
 }

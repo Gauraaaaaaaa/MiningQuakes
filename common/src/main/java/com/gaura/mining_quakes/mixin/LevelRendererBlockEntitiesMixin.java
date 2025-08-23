@@ -6,9 +6,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LevelRendererBlockEntitiesMixin {
 
     @Inject(
-            method = "renderBlockEntities",
+            method = "renderLevel",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V",
@@ -27,10 +30,11 @@ public class LevelRendererBlockEntitiesMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void onRenderBlockEntities(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, MultiBufferSource.BufferSource bufferSource2, Camera camera, float f, CallbackInfo ci, @Local(ordinal = 0) BlockPos blockPos) {
+    private void onRenderBlockEntities(DeltaTracker deltaTracker, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci, @Local(ordinal = 0) PoseStack poseStack, @Local(ordinal = 0) BlockPos blockPos) {
 
         if (BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
 
+            float f = deltaTracker.getGameTimeDeltaPartialTick(false);
             BlockQuakeParticleManager.addQuake(blockPos, poseStack, f);
         }
     }

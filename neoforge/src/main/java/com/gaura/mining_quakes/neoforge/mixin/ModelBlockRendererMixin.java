@@ -18,33 +18,33 @@ public class ModelBlockRendererMixin {
             method = "tesselateWithAO(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JILnet/neoforged/neoforge/client/model/data/ModelData;Lnet/minecraft/client/renderer/RenderType;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/block/Block;shouldRenderFace(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;)Z"
+                    target = "Lnet/minecraft/world/level/block/Block;shouldRenderFace(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;Lnet/minecraft/core/BlockPos;)Z"
             )
     )
-    private boolean onTesselateWithAO(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, BlockState blockState2, Direction direction, Operation<Boolean> original) {
+    private boolean onTesselateWithAO(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction, BlockPos searchBlockPos, Operation<Boolean> original) {
 
-        if (BlockQuakeParticleManager.isBlockInvisible(blockPos.relative(direction))) {
+        if (BlockQuakeParticleManager.isBlockInvisible(searchBlockPos)) {
 
             return true;
         }
 
-        return original.call(blockGetter, blockPos, blockState, blockState2, direction);
+        return original.call(blockState, blockGetter, blockPos, direction, searchBlockPos);
     }
 
     @WrapOperation(
             method = "tesselateWithoutAO(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JILnet/neoforged/neoforge/client/model/data/ModelData;Lnet/minecraft/client/renderer/RenderType;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/block/Block;shouldRenderFace(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;)Z"
+                    target = "Lnet/minecraft/world/level/block/Block;shouldRenderFace(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;Lnet/minecraft/core/BlockPos;)Z"
             )
     )
-    private boolean onTesselateWithoutAO(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, BlockState blockState2, Direction direction, Operation<Boolean> original) {
+    private boolean onTesselateWithoutAO(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction, BlockPos searchBlockPos, Operation<Boolean> original) {
 
-        if (BlockQuakeParticleManager.isBlockInvisible(blockPos.relative(direction))) {
+        if (BlockQuakeParticleManager.isBlockInvisible(searchBlockPos)) {
 
             return true;
         }
 
-        return original.call(blockGetter, blockPos, blockState, blockState2, direction);
+        return original.call(blockState, blockGetter, blockPos, direction, searchBlockPos);
     }
 }

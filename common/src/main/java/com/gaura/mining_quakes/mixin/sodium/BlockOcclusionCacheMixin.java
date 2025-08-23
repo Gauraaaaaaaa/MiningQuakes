@@ -22,7 +22,7 @@ public class BlockOcclusionCacheMixin {
             method = "shouldDrawSide",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/core/BlockPos$MutableBlockPos;setWithOffset(Lnet/minecraft/core/Vec3i;Lnet/minecraft/core/Direction;)Lnet/minecraft/core/BlockPos$MutableBlockPos;",
+                    target = "Lnet/minecraft/core/BlockPos$MutableBlockPos;set(III)Lnet/minecraft/core/BlockPos$MutableBlockPos;",
                     shift = At.Shift.AFTER
             ),
             cancellable = true

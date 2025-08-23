@@ -4,8 +4,11 @@ import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.client.renderer.chunk.SectionCompiler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,16 +38,16 @@ public class SectionCompilerMixin {
             method = "compile",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/block/state/BlockState;isSolidRender()Z"
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;isSolidRender(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Z"
             )
     )
-    private boolean onIsSolidRender(BlockState blockState, Operation<Boolean> original, @Local(ordinal = 2) BlockPos blockPos) {
+    private boolean onIsSolidRender(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Operation<Boolean> original) {
 
-        if (original.call(blockState) && BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
+        if (original.call(blockState, blockGetter, blockPos) && BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
 
             return false;
         }
 
-        return original.call(blockState);
+        return original.call(blockState, blockGetter, blockPos);
     }
 }

@@ -113,12 +113,10 @@ public class BlockQuakeParticle extends Particle {
     }
 
     @Override
-    public void render(VertexConsumer vertexConsumer, Camera camera, float f) {}
+    public void render(VertexConsumer vertexConsumer, Camera camera, float f) {
 
-    @Override
-    public void renderCustom(PoseStack poseStack, MultiBufferSource multiBufferSource, Camera camera, float f) {
-
-        poseStack.pushPose();
+        PoseStack poseStack = new PoseStack();
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 
         float x = (float) (Mth.lerp(f, this.xo, this.x) - camera.getPosition().x());
         float y = (float) (Mth.lerp(f, this.yo, this.y) - camera.getPosition().y());
@@ -134,7 +132,7 @@ public class BlockQuakeParticle extends Particle {
                 this.blockState,
                 this.blockPos,
                 poseStack,
-                multiBufferSource.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType(this.blockState)),
+                bufferSource.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType(this.blockState)),
                 false,
                 this.source,
                 this.blockState.getSeed(this.blockPos),
@@ -152,7 +150,7 @@ public class BlockQuakeParticle extends Particle {
                     this.blockState,
                     this.blockPos,
                     poseStack,
-                    new SheetedDecalTextureGenerator(multiBufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(progressSet.last().getProgress())), poseStack.last(), 1.0F),
+                    new SheetedDecalTextureGenerator(bufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(progressSet.last().getProgress())), poseStack.last(), 1.0F),
                     true,
                     this.source,
                     this.blockState.getSeed(this.blockPos),
@@ -160,7 +158,7 @@ public class BlockQuakeParticle extends Particle {
             );
         }
 
-        poseStack.popPose();
+        bufferSource.endBatch();
     }
 
     public void animate(PoseStack poseStack, float f) {
@@ -180,12 +178,12 @@ public class BlockQuakeParticle extends Particle {
 
         RotationPair rotation = ROTATIONS.get(this.direction);
 
-        poseStack.translate(this.pivotPoint);
+        poseStack.translate(this.pivotPoint.x, this.pivotPoint.y, this.pivotPoint.z);
 
         poseStack.mulPose(rotation.horizontalAxis.rotationDegrees(verticalAngle));
         poseStack.mulPose(rotation.verticalAxis.rotationDegrees(horizontalAngle));
 
-        poseStack.translate(this.pivotPoint.reverse());
+        poseStack.translate(-this.pivotPoint.x, -this.pivotPoint.y, -this.pivotPoint.z);
     }
 
     @Override
