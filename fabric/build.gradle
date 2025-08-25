@@ -41,8 +41,9 @@ dependencies {
     modCompileOnly(modmenu)
     modRuntimeOnly(modmenu)
 
-    modRuntimeOnly("maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-fabric")
+    modRuntimeOnly("maven.modrinth:sodium:mc${project.minecraft_version}.1-${project.sodium_version}-fabric")
 
+    include("me.fallenbreath:conditional-mixin-fabric:${project.fallenbreath_version}")
     modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.fallenbreath_version}")
 }
 

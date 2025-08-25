@@ -39,8 +39,9 @@ dependencies {
 
     api("me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}")
 
-    runtimeOnly("maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-neoforge")
+//    runtimeOnly("maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-neoforge")
 
+    include("me.fallenbreath:conditional-mixin-neoforge:${project.fallenbreath_version}")
     implementation("me.fallenbreath:conditional-mixin-neoforge:${project.fallenbreath_version}")
 }
 
