@@ -1,13 +1,11 @@
-package com.gaura.mining_quakes.mixin.sodium;
+package com.gaura.mining_quakes.fabric.mixin.sodium;
 
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
-import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.caffeinemc.mods.sodium.client.render.SodiumWorldRenderer;
-import net.minecraft.client.player.LocalPlayer;
+import me.jellysquid.mods.sodium.client.render.SodiumWorldRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
@@ -21,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.SortedSet;
 
 @Restriction(require = @Condition("sodium"))
-@Mixin(SodiumWorldRenderer.class)
+@Mixin(value = SodiumWorldRenderer.class, remap = false)
 public class SodiumWorldRendererMixin {
 
     @Inject(
@@ -32,7 +30,7 @@ public class SodiumWorldRendererMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private static void onRenderBlockEntity(PoseStack poseStack, RenderBuffers renderBuffers, Long2ObjectMap<SortedSet<BlockDestructionProgress>> blockBreakingProgressions, float f, MultiBufferSource.BufferSource bufferSource, double x, double y, double z, BlockEntityRenderDispatcher blockEntityRenderDispatcher, BlockEntity blockEntity, LocalPlayer player, LocalBooleanRef isGlowing, CallbackInfo ci) {
+    private static void onRenderBlockEntity(PoseStack poseStack, RenderBuffers bufferBuilders, Long2ObjectMap<SortedSet<BlockDestructionProgress>> blockBreakingProgressions, float f, MultiBufferSource.BufferSource bufferSource, double x, double y, double z, BlockEntityRenderDispatcher blockEntityRenderDispatcher, BlockEntity blockEntity, CallbackInfo ci) {
 
         if (BlockQuakeParticleManager.isBlockInvisible(blockEntity.getBlockPos())) {
 

@@ -26,7 +26,7 @@ public final class MiningQuakes {
 
         for (String blockId : CONFIG.blacklist) {
 
-            if (blockState.getBlockHolder().is(ResourceLocation.parse(blockId))) {
+            if (blockState.getBlockHolder().is(ResourceLocation.tryParse(blockId))) {
 
                 return true;
             }

@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,7 +38,8 @@ public class MultiPlayerGameModeMixin {
 
             if (blockState.getBlock() instanceof DoorBlock) {
 
-                BlockPos otherBlockPos = blockPos.relative(blockState.getValue(DoorBlock.HALF).getDirectionToOther());
+                Direction doorPart = blockState.getValue(DoorBlock.HALF) == DoubleBlockHalf.LOWER ? Direction.UP : Direction.DOWN;
+                BlockPos otherBlockPos = blockPos.relative(doorPart);
                 BlockState otherBlockState = clientLevel.getBlockState(otherBlockPos);
                 BlockQuakeParticleManager.removeQuakeAnimation(clientLevel, otherBlockPos, otherBlockState);
             }
@@ -74,7 +76,8 @@ public class MultiPlayerGameModeMixin {
 
                 if (blockState.getBlock() instanceof DoorBlock) {
 
-                    BlockPos otherBlockPos = blockPos.relative(blockState.getValue(DoorBlock.HALF).getDirectionToOther());
+                    Direction doorPart = blockState.getValue(DoorBlock.HALF) == DoubleBlockHalf.LOWER ? Direction.UP : Direction.DOWN;
+                    BlockPos otherBlockPos = blockPos.relative(doorPart);
                     BlockState otherBlockState = clientLevel.getBlockState(otherBlockPos);
                     BlockQuakeParticleManager.addQuakeAnimation(clientLevel, otherBlockPos.immutable(), otherBlockState, direction, randomHorizontal, randomVertical);
                 }

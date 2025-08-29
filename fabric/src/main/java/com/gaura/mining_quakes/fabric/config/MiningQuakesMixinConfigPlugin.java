@@ -1,4 +1,4 @@
-package com.gaura.mining_quakes.config;
+package com.gaura.mining_quakes.fabric.config;
 
 import me.fallenbreath.conditionalmixin.api.mixin.RestrictiveMixinConfigPlugin;
 

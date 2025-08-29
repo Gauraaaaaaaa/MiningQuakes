@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -78,7 +79,8 @@ public class BlockQuakeParticle extends Particle {
 
         if (blockState.getBlock() instanceof DoorBlock) {
 
-            this.pivotPoint = this.pivotPoint.relative(blockState.getValue(DoorBlock.HALF).getDirectionToOther(), 0.5);
+            Direction doorPart = blockState.getValue(DoorBlock.HALF) == DoubleBlockHalf.LOWER ? Direction.UP : Direction.DOWN;
+            this.pivotPoint = this.pivotPoint.relative(doorPart, 0.5);
         }
         else if (blockState.getBlock() instanceof ChestBlock && blockState.getValue(ChestBlock.TYPE) != ChestType.SINGLE) {
 
@@ -144,13 +146,15 @@ public class BlockQuakeParticle extends Particle {
 
         if (progressSet != null && !progressSet.isEmpty()) {
 
+            PoseStack.Pose pose = poseStack.last();
+
             this.modelBlockRenderer.tesselateBlock(
                     this.level,
                     this.bakedModel,
                     this.blockState,
                     this.blockPos,
                     poseStack,
-                    new SheetedDecalTextureGenerator(bufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(progressSet.last().getProgress())), poseStack.last(), 1.0F),
+                    new SheetedDecalTextureGenerator(bufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(progressSet.last().getProgress())), pose.pose(), pose.normal(), 1.0F),
                     true,
                     this.source,
                     this.blockState.getSeed(this.blockPos),

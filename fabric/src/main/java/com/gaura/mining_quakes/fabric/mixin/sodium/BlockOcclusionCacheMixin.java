@@ -1,10 +1,10 @@
-package com.gaura.mining_quakes.mixin.sodium;
+package com.gaura.mining_quakes.fabric.mixin.sodium;
 
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
 import com.llamalad7.mixinextras.sugar.Local;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockOcclusionCache;
+import me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.BlockOcclusionCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Restriction(require = @Condition("sodium"))
-@Mixin(BlockOcclusionCache.class)
+@Mixin(value = BlockOcclusionCache.class, remap = false)
 public class BlockOcclusionCacheMixin {
 
     @Inject(

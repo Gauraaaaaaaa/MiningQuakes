@@ -1,4 +1,4 @@
-package com.gaura.mining_quakes.mixin;
+package com.gaura.mining_quakes.fabric.mixin;
 
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.Camera;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -19,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Restriction(conflict = @Condition("sodium"))
 @Mixin(LevelRenderer.class)
-public class LevelRendererBlockEntitiesMixin {
+public class LevelRendererMixin {
 
     @Inject(
             method = "renderLevel",
@@ -30,11 +29,10 @@ public class LevelRendererBlockEntitiesMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void onRenderBlockEntities(DeltaTracker deltaTracker, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci, @Local(ordinal = 0) PoseStack poseStack, @Local(ordinal = 0) BlockPos blockPos) {
+    private void onRenderBlockEntities(PoseStack poseStack, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, CallbackInfo ci, @Local(ordinal = 0) BlockPos blockPos) {
 
         if (BlockQuakeParticleManager.isBlockInvisible(blockPos)) {
 
-            float f = deltaTracker.getGameTimeDeltaPartialTick(false);
             BlockQuakeParticleManager.addQuake(blockPos, poseStack, f);
         }
     }

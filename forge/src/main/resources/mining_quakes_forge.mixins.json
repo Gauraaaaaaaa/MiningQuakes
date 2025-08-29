@@ -1,14 +1,12 @@
 {
   "required": true,
-  "package": "com.gaura.mining_quakes.mixin",
+  "package": "com.gaura.mining_quakes.forge.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
-    "ClientLevelAccessor",
-    "LevelRendererAccessor",
+    "BlockRenderDispatcherMixin",
     "LevelRendererMixin",
-    "MultiPlayerGameModeMixin",
-    "RebuildTaskMixin"
+    "ModelBlockRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
