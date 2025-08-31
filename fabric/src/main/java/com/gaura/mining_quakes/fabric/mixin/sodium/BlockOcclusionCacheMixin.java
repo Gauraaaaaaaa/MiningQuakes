@@ -1,7 +1,6 @@
 package com.gaura.mining_quakes.fabric.mixin.sodium;
 
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
-import com.llamalad7.mixinextras.sugar.Local;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.BlockOcclusionCache;
@@ -17,20 +16,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Restriction(require = @Condition("sodium"))
 @Mixin(value = BlockOcclusionCache.class, remap = false)
 public class BlockOcclusionCacheMixin {
-
+    
     @Inject(
             method = "shouldDrawSide",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/core/BlockPos$MutableBlockPos;set(III)Lnet/minecraft/core/BlockPos$MutableBlockPos;",
-                    shift = At.Shift.AFTER
-            ),
+            at = @At("HEAD"),
             cancellable = true
     )
-    public void onShouldDrawSide(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction, CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0) BlockPos.MutableBlockPos neighborBlockPos) {
-
-        if (BlockQuakeParticleManager.isBlockInvisible(neighborBlockPos.setWithOffset(blockPos, direction))) {
-
+    public void onShouldDrawSide(BlockState selfState, BlockGetter world, BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
+        // Calculate the neighbor position
+        BlockPos neighborPos = pos.relative(direction);
+        
+        if (BlockQuakeParticleManager.isBlockInvisible(neighborPos)) {
             cir.setReturnValue(true);
         }
     }
