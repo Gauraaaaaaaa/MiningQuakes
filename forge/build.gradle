@@ -41,6 +41,14 @@ dependencies {
 
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixin_extras_version}"))
     implementation(include("io.github.llamalad7:mixinextras-forge:${project.mixin_extras_version}"))
+
+    def embedium = "maven.modrinth:embeddium:${project.embeddium_version}+mc${project.minecraft_version}"
+    modCompileOnly(embedium)
+    modRuntimeOnly(embedium)
+
+    def conditional_mixin = "me.fallenbreath:conditional-mixin-forge:${project.conditional_mixin_version}"
+    include(conditional_mixin)
+    modImplementation(conditional_mixin)
 }
 
 processResources {

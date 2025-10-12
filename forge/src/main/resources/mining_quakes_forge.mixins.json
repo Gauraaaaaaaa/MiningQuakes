@@ -6,7 +6,9 @@
   "client": [
     "BlockRenderDispatcherMixin",
     "LevelRendererMixin",
-    "ModelBlockRendererMixin"
+    "ModelBlockRendererMixin",
+    "embedium.BlockOcclusionCacheMixin",
+    "embedium.BlockRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
