@@ -62,6 +62,13 @@ public class BlockQuakeParticleManager {
         if (INVISIBLE_BLOCKS.add(blockPos)) {
 
             updateBlock(clientLevel, blockPos, blockState);
+
+            // Force chunk rebuild for this block
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.levelRenderer != null) {
+                // Use the public method that marks a block position as dirty
+                mc.levelRenderer.setBlockDirty(blockPos, blockState, blockState);
+            }
         }
     }
 
@@ -70,6 +77,12 @@ public class BlockQuakeParticleManager {
         if (INVISIBLE_BLOCKS.remove(blockPos)) {
 
             updateBlock(clientLevel, blockPos, blockState);
+
+            // Force chunk rebuild to restore the block
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.levelRenderer != null) {
+                mc.levelRenderer.setBlockDirty(blockPos, blockState, blockState);
+            }
         }
     }
 

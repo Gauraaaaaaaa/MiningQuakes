@@ -10,7 +10,8 @@
     "LevelRendererMixin",
     "sodium.BlockOcclusionCacheMixin",
     "sodium.BlockRendererMixin",
-    "sodium.BlockEntityRenderDispatcherMixin"
+    "sodium.BlockEntityRenderDispatcherMixin",
+    "indium.IndiumTerrainRenderContextMixin"
   ],
   "injectors": {
     "defaultRequire": 1

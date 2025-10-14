@@ -18,14 +18,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BlockEntityRenderDispatcherMixin {
 
     /**
-     * Hook into vanilla block entity rendering.
-     * This works safely with Sodium (including shader path) and avoids world-load NPE.
+     * When Sodium is installed, it calls translate() BEFORE calling this vanilla render method.
+     * So injecting at HEAD here is actually AFTER the translate, which is exactly what we need
+     * for proper synchronization between shake and destroy animations.
      */
     @Inject(
         method = "render(Lnet/minecraft/world/level/block/entity/BlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
         at = @At("HEAD")
     )
-    private void miningquakes$beforeBlockEntityRender(BlockEntity blockEntity, float tickDelta, PoseStack poseStack, MultiBufferSource bufferSource, CallbackInfo ci) {
+    private void miningquakes$applyShake(BlockEntity blockEntity, float tickDelta, PoseStack poseStack, MultiBufferSource bufferSource, CallbackInfo ci) {
         Minecraft mc = Minecraft.getInstance();
 
         // Safety checks: only run in-world and if block entity exists
