@@ -8,6 +8,7 @@
     "BlockRenderDispatcherMixin",
     "BlockRenderInfoMixin",
     "LevelRendererMixin",
+    "indium.TerrainRenderContextMixin",
     "sodium.BlockOcclusionCacheMixin",
     "sodium.BlockRendererMixin",
     "sodium.SodiumWorldRendererMixin"

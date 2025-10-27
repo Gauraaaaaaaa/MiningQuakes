@@ -45,6 +45,10 @@ dependencies {
     modCompileOnly(sodium)
     modRuntimeOnly(sodium)
 
+    def indium = "maven.modrinth:indium:${project.indium_version}+mc${project.minecraft_version}"
+    modCompileOnly(indium)
+    modRuntimeOnly(indium)
+
     def conditional_mixin = "me.fallenbreath:conditional-mixin-fabric:${project.conditional_mixin_version}"
     include(conditional_mixin)
     modImplementation(conditional_mixin)

@@ -1,4 +1,4 @@
-package com.gaura.mining_quakes.fabric.mixin.sodium;
+package com.gaura.mining_quakes.forge.mixin.embedium;
 
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
 import com.mojang.blaze3d.vertex.PoseStack;

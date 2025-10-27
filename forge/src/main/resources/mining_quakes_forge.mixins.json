@@ -8,7 +8,8 @@
     "LevelRendererMixin",
     "ModelBlockRendererMixin",
     "embedium.BlockOcclusionCacheMixin",
-    "embedium.BlockRendererMixin"
+    "embedium.BlockRendererMixin",
+    "embedium.SodiumWorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

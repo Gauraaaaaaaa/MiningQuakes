@@ -23,7 +23,8 @@ public class BlockOcclusionCacheMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/core/BlockPos$MutableBlockPos;set(III)Lnet/minecraft/core/BlockPos$MutableBlockPos;",
-                    shift = At.Shift.AFTER
+                    shift = At.Shift.AFTER,
+                    remap = true
             ),
             cancellable = true
     )

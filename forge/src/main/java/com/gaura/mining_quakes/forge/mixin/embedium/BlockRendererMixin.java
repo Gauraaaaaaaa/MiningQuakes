@@ -16,9 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BlockRendererMixin {
 
     @Inject(method = "renderModel", at = @At("HEAD"), cancellable = true)
-    private void onRenderModel(BlockRenderContext ctx, ChunkBuildBuffers buffers, CallbackInfo ci) {
+    private void onRenderModel(BlockRenderContext blockRenderContext, ChunkBuildBuffers chunkBuildBuffers, CallbackInfo ci) {
 
-        if (BlockQuakeParticleManager.isBlockInvisible(ctx.pos())) {
+        if (BlockQuakeParticleManager.isBlockInvisible(blockRenderContext.pos())) {
 
             ci.cancel();
         }

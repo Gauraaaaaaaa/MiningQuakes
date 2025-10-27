@@ -1,22 +1,21 @@
-package com.gaura.mining_quakes.fabric.mixin.sodium;
+package com.gaura.mining_quakes.fabric.mixin.indium;
 
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
+import link.infra.indium.renderer.render.TerrainRenderContext;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import me.jellysquid.mods.sodium.client.render.chunk.compile.ChunkBuildBuffers;
 import me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.BlockRenderContext;
-import me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.BlockRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Restriction(require = @Condition("sodium"))
-@Mixin(value = BlockRenderer.class, remap = false)
-public class BlockRendererMixin {
+@Restriction(require = @Condition("indium"))
+@Mixin(value = TerrainRenderContext.class, remap = false)
+public class TerrainRenderContextMixin {
 
-    @Inject(method = "renderModel", at = @At("HEAD"), cancellable = true)
-    private void onRenderModel(BlockRenderContext blockRenderContext, ChunkBuildBuffers chunkBuildBuffers, CallbackInfo ci) {
+    @Inject(method = "tessellateBlock", at = @At("HEAD"), cancellable = true)
+    private void onTessellateBlock(BlockRenderContext blockRenderContext, CallbackInfo ci) {
 
         if (BlockQuakeParticleManager.isBlockInvisible(blockRenderContext.pos())) {
 
