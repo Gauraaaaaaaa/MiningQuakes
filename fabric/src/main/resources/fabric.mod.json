@@ -17,7 +17,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.gaura.mining_quakes.fabric.MiningQuakesFabric"
+      "com.gaura.mining_quakes.fabric.MiningQuakesImpl"
     ],
     "modmenu": [
       "com.gaura.mining_quakes.fabric.config.ModMenuIntegration"

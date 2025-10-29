@@ -41,8 +41,9 @@ dependencies {
 
     runtimeOnly("maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-neoforge")
 
-    include("me.fallenbreath:conditional-mixin-neoforge:${project.fallenbreath_version}")
-    implementation("me.fallenbreath:conditional-mixin-neoforge:${project.fallenbreath_version}")
+    def conditional_mixin = "me.fallenbreath:conditional-mixin-neoforge:${project.conditional_mixin_version}"
+    include(conditional_mixin)
+    implementation(conditional_mixin)
 }
 
 processResources {

@@ -9,9 +9,9 @@ import com.gaura.mining_quakes.MiningQuakes;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @Mod(MiningQuakes.MOD_ID)
-public final class MiningQuakesNeoForge {
+public final class MiningQuakesImpl {
 
-    public MiningQuakesNeoForge() {
+    public MiningQuakesImpl() {
 
         MiningQuakes.init();
 
@@ -19,5 +19,10 @@ public final class MiningQuakesNeoForge {
                 IConfigScreenFactory.class,
                 () -> (client, parent) -> AutoConfig.getConfigScreen(MiningQuakesConfig.class, parent).get()
         );
+    }
+
+    public static boolean isContinuityLoaded() {
+
+        return false;
     }
 }
