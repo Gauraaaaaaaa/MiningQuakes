@@ -8,7 +8,8 @@
     "ModelBlockRendererMixin",
     "SectionCompilerMixin",
     "embeddium.BlockOcclusionCacheMixin",
-    "embeddium.BlockRendererMixin"
+    "embeddium.BlockRendererMixin",
+    "embeddium.EmbeddiumWorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

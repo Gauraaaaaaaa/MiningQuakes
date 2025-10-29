@@ -39,9 +39,9 @@ dependencies {
 
     api("me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}")
 
-    def embedium = "maven.modrinth:embeddium:${project.embeddium_version}+mc${project.minecraft_version}"
-    modCompileOnly(embedium)
-    modRuntimeOnly(embedium)
+    def embeddium = "maven.modrinth:embeddium:${project.embeddium_version}+mc${project.minecraft_version}"
+    modCompileOnly(embeddium)
+    modRuntimeOnly(embeddium)
 
     def conditional_mixin = "me.fallenbreath:conditional-mixin-neoforge:${project.conditional_mixin_version}"
     include(conditional_mixin)
