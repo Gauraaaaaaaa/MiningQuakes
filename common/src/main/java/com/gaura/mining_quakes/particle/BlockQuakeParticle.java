@@ -132,7 +132,7 @@ public class BlockQuakeParticle extends Particle {
                 this.blockState,
                 this.blockPos,
                 poseStack,
-                bufferSource.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType(this.blockState)),
+                bufferSource.getBuffer(MiningQuakes.isContinuityLoaded() ? RenderType.cutout() : ItemBlockRenderTypes.getMovingBlockRenderType(this.blockState)),
                 false,
                 this.source,
                 this.blockState.getSeed(this.blockPos),

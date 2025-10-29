@@ -6,7 +6,9 @@
   "client": [
     "BlockRenderDispatcherMixin",
     "ModelBlockRendererMixin",
-    "SectionCompilerMixin"
+    "SectionCompilerMixin",
+    "embeddium.BlockOcclusionCacheMixin",
+    "embeddium.BlockRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

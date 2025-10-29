@@ -39,10 +39,13 @@ dependencies {
 
     api("me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}")
 
-//    runtimeOnly("maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-neoforge")
+    def embedium = "maven.modrinth:embeddium:${project.embeddium_version}+mc${project.minecraft_version}"
+    modCompileOnly(embedium)
+    modRuntimeOnly(embedium)
 
-    include("me.fallenbreath:conditional-mixin-neoforge:${project.fallenbreath_version}")
-    implementation("me.fallenbreath:conditional-mixin-neoforge:${project.fallenbreath_version}")
+    def conditional_mixin = "me.fallenbreath:conditional-mixin-neoforge:${project.conditional_mixin_version}"
+    include(conditional_mixin)
+    implementation(conditional_mixin)
 }
 
 processResources {
