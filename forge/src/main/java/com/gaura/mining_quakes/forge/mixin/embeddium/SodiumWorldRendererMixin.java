@@ -1,4 +1,4 @@
-package com.gaura.mining_quakes.forge.mixin.embedium;
+package com.gaura.mining_quakes.forge.mixin.embeddium;
 
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.SortedSet;
 
-@Restriction(require = @Condition("sodium"))
+@Restriction(require = @Condition("embeddium"))
 @Mixin(value = SodiumWorldRenderer.class, remap = false)
 public class SodiumWorldRendererMixin {
 

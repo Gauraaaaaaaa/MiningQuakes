@@ -1,4 +1,4 @@
-package com.gaura.mining_quakes.forge.mixin.embedium;
+package com.gaura.mining_quakes.forge.mixin.embeddium;
 
 import com.gaura.mining_quakes.particle.BlockQuakeParticleManager;
 import com.llamalad7.mixinextras.sugar.Local;

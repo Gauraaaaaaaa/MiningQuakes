@@ -10,6 +10,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Continuity support thanks to @Arona74
+ */
 @Restriction(require = @Condition("indium"))
 @Mixin(value = TerrainRenderContext.class, remap = false)
 public class TerrainRenderContextMixin {

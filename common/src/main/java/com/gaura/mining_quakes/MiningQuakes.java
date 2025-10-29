@@ -1,6 +1,7 @@
 package com.gaura.mining_quakes;
 
 import com.gaura.mining_quakes.config.MiningQuakesConfig;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraft.resources.ResourceLocation;
@@ -11,6 +12,8 @@ import org.slf4j.LoggerFactory;
 public final class MiningQuakes {
 
     public static final String MOD_ID = "mining_quakes";
+
+    public static final String CONTINUITY_MOD_ID = "continuity";
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
@@ -33,5 +36,11 @@ public final class MiningQuakes {
         }
 
         return false;
+    }
+
+    @ExpectPlatform
+    public static boolean isContinuityLoaded() {
+
+        throw new AssertionError();
     }
 }
