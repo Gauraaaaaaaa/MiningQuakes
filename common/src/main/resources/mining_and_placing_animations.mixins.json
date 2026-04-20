@@ -8,7 +8,7 @@
     "LevelRendererMixin",
     "MultiPlayerGameModeMixin",
     "iris.ShadowRendererMixin",
-    "sodium.AbstractBlockRenderContextMixin",
+    "sodium.BlockOcclusionCacheMixin",
     "sodium.BlockRendererMixin",
     "sodium.SodiumWorldRendererMixin"
   ],

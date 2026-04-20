@@ -2,13 +2,13 @@ package com.gaura.mining_and_placing_animations.animation.data;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.Identifier;
-import org.jspecify.annotations.Nullable;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record AnimationRule(List<String> blocks, @Nullable Identifier miningAnimationId, @Nullable Identifier placingAnimationId) {
+public record AnimationRule(List<String> blocks, @Nullable ResourceLocation miningAnimationId, @Nullable ResourceLocation placingAnimationId) {
 
     public static AnimationRule fromJson(JsonObject jsonObject) {
 
@@ -19,9 +19,9 @@ public record AnimationRule(List<String> blocks, @Nullable Identifier miningAnim
             blocks.add(jsonElement.getAsString());
         }
 
-        Identifier miningAnimationId = jsonObject.has("mining_animation") ? Identifier.parse(jsonObject.get("mining_animation").getAsString()) : null;
+        ResourceLocation miningAnimationId = jsonObject.has("mining_animation") ? ResourceLocation.parse(jsonObject.get("mining_animation").getAsString()) : null;
 
-        Identifier placingAnimationId = jsonObject.has("placing_animation") ? Identifier.parse(jsonObject.get("placing_animation").getAsString()) : null;
+        ResourceLocation placingAnimationId = jsonObject.has("placing_animation") ? ResourceLocation.parse(jsonObject.get("placing_animation").getAsString()) : null;
 
         return new AnimationRule(blocks, miningAnimationId, placingAnimationId);
     }

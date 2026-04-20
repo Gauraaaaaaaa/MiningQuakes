@@ -19,17 +19,11 @@ import net.minecraft.client.renderer.state.BlockOutlineRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
-
-    @Shadow
-    @Final
-    private Minecraft minecraft;
 
     @WrapOperation(
             method = "submitBlockEntities",
@@ -98,7 +92,7 @@ public class LevelRendererMixin {
     }
 
     @WrapMethod(method = "renderHitOutline")
-    private void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, double x, double y, double z, BlockOutlineRenderState blockOutlineRenderState, int i, float g, Operation<Void> original) {
+    private void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, double x, double y, double z, BlockOutlineRenderState blockOutlineRenderState, int i, Operation<Void> original) {
 
         BlockPos blockPos = blockOutlineRenderState.pos();
 
@@ -120,7 +114,7 @@ public class LevelRendererMixin {
 
                     poseStack.translate(center.reverse());
 
-                    original.call(poseStack, vertexConsumer, x, y, z, blockOutlineRenderState, i, g);
+                    original.call(poseStack, vertexConsumer, x, y, z, blockOutlineRenderState, i);
                 }
             }
             finally {
@@ -130,7 +124,7 @@ public class LevelRendererMixin {
         }
         else {
 
-            original.call(poseStack, vertexConsumer, x, y, z, blockOutlineRenderState, i, g);
+            original.call(poseStack, vertexConsumer, x, y, z, blockOutlineRenderState, i);
         }
     }
 }

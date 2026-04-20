@@ -2,20 +2,18 @@ package com.gaura.mining_and_placing_animations.mixin.sodium;
 
 import com.gaura.mining_and_placing_animations.animation.BlockAnimationManager;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.caffeinemc.mods.sodium.client.render.model.AbstractBlockRenderContext;
+import net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockOcclusionCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(AbstractBlockRenderContext.class)
-public class AbstractBlockRenderContextMixin {
-
-    @Shadow
-    protected BlockPos pos;
+@Mixin(BlockOcclusionCache.class)
+public class BlockOcclusionCacheMixin {
 
     @Inject(
             method = "shouldDrawSide",
@@ -26,9 +24,9 @@ public class AbstractBlockRenderContextMixin {
             ),
             cancellable = true
     )
-    public void onShouldDrawSide(Direction direction, CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0) BlockPos.MutableBlockPos neighborBlockPos) {
+    public void onShouldDrawSide(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction, CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0) BlockPos.MutableBlockPos neighborBlockPos) {
 
-        if (BlockAnimationManager.isBlockInvisible(neighborBlockPos.setWithOffset(this.pos, direction))) {
+        if (BlockAnimationManager.isBlockInvisible(neighborBlockPos.setWithOffset(blockPos, direction))) {
 
             cir.setReturnValue(true);
         }

@@ -3,13 +3,13 @@ package com.gaura.mining_and_placing_animations.animation.data;
 import com.gaura.mining_and_placing_animations.MiningAndPlacingAnimations;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -22,15 +22,15 @@ public class AnimationResourceManager implements ResourceManagerReloadListener {
 
     private static AnimationConfig animationConfig = null;
 
-    private static final Map<Identifier, AnimationModel> ANIMATION_MODELS = new HashMap<>();
+    private static final Map<ResourceLocation, AnimationModel> ANIMATION_MODELS = new HashMap<>();
 
     @Override
-    public void onResourceManagerReload(@NonNull ResourceManager resourceManager) {
+    public void onResourceManagerReload(@NotNull ResourceManager resourceManager) {
 
         animationConfig = null;
         ANIMATION_MODELS.clear();
 
-        resourceManager.getResource(Identifier.fromNamespaceAndPath(MiningAndPlacingAnimations.MOD_ID, "animations_config.json")).ifPresent(resource -> {
+        resourceManager.getResource(ResourceLocation.fromNamespaceAndPath(MiningAndPlacingAnimations.MOD_ID, "animations_config.json")).ifPresent(resource -> {
 
             try (Reader reader = new InputStreamReader(resource.open())) {
 
@@ -56,7 +56,7 @@ public class AnimationResourceManager implements ResourceManagerReloadListener {
                 AnimationModel animationDefinition = AnimationModel.fromJson(GsonHelper.fromJson(GSON, reader, JsonObject.class));
 
                 String path = location.getPath().replace(".json", "");
-                Identifier identifier = Identifier.fromNamespaceAndPath(location.getNamespace(), path);
+                ResourceLocation identifier = ResourceLocation.fromNamespaceAndPath(location.getNamespace(), path);
 
                 ANIMATION_MODELS.put(identifier, animationDefinition);
             }
@@ -68,19 +68,19 @@ public class AnimationResourceManager implements ResourceManagerReloadListener {
     }
 
     @Nullable
-    public static Identifier getMiningAnimationId(BlockState blockState) {
+    public static ResourceLocation getMiningAnimationId(BlockState blockState) {
 
         return animationConfig != null ? animationConfig.getMiningAnimation(blockState) : null;
     }
 
     @Nullable
-    public static Identifier getPlacingAnimationId(BlockState blockState) {
+    public static ResourceLocation getPlacingAnimationId(BlockState blockState) {
 
         return animationConfig != null ? animationConfig.getPlacingAnimation(blockState) : null;
     }
 
     @Nullable
-    public static AnimationModel getAnimationModel(@Nullable Identifier identifier) {
+    public static AnimationModel getAnimationModel(@Nullable ResourceLocation identifier) {
 
         return ANIMATION_MODELS.get(identifier);
     }

@@ -6,7 +6,7 @@ import com.gaura.mining_and_placing_animations.animation.data.AnimationResourceM
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
@@ -31,7 +31,7 @@ public final class MiningAndPlacingAnimationsNeoForge {
     @SubscribeEvent
     public static void onRegisterReloadListeners(AddClientReloadListenersEvent event) {
 
-        event.addListener(Identifier.fromNamespaceAndPath(MiningAndPlacingAnimations.MOD_ID, "animation_loader"), new AnimationResourceManager());
+        event.addListener(ResourceLocation.fromNamespaceAndPath(MiningAndPlacingAnimations.MOD_ID, "animation_loader"), new AnimationResourceManager());
     }
 
     @SubscribeEvent
@@ -40,7 +40,7 @@ public final class MiningAndPlacingAnimationsNeoForge {
         if (event.getPackType() == PackType.CLIENT_RESOURCES) {
 
             event.addPackFinders(
-                    Identifier.fromNamespaceAndPath(MiningAndPlacingAnimations.MOD_ID, "resourcepacks/default_animations"),
+                    ResourceLocation.fromNamespaceAndPath(MiningAndPlacingAnimations.MOD_ID, "resourcepacks/default_animations"),
                     PackType.CLIENT_RESOURCES,
                     Component.literal("Default Mining & Placing Animations"),
                     PackSource.BUILT_IN,
