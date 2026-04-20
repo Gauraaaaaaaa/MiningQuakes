@@ -1,32 +1,32 @@
 modLoader = "javafml"
-loaderVersion = "[4,)"
-modURL = "https://modrinth.com/mod/mining-quakes"
-issueTrackerURL = "https://github.com/Gauraaaaaaaa/MiningQuakes/issues"
-license = "GPL-3.0"
+loaderVersion = "[2,)"
+modURL = "https://modrinth.com/mod/mining_and_placing_animations"
+issueTrackerURL = "https://github.com/Gauraaaaaaaa/MiningAndPlacingAnimations/issues"
+license = "GNU GPL 3.0"
 
 [[mods]]
-modId = "mining_quakes"
+modId = "mining_and_placing_animations"
 version = "${version}"
-displayName = "Mining Quakes"
+displayName = "Mining & Placing Animations"
 authors = "Gaura"
-description = '''Adds shakes to blocks when destroying!'''
-logoFile = "assets/mining_quakes/icon.png"
+description = '''Adds customizable animations to blocks when mining and placing! (Mining Quakes successor)'''
+logoFile = "assets/mining_and_placing_animations/icon.png"
 
-[[dependencies.mining_quakes]]
+[[dependencies.mining_and_placing_animations]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.6,)"
+versionRange = "[21,)"
 ordering = "NONE"
 side = "CLIENT"
 
-[[dependencies.mining_quakes]]
+[[dependencies.mining_and_placing_animations]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.6,)"
+versionRange = "[1.21.11,)"
 ordering = "NONE"
 side = "CLIENT"
 
 [[mixins]]
-config = "mining_quakes.mixins.json"
+config = "mining_and_placing_animations.mixins.json"
 [[mixins]]
-config = "mining_quakes_neoforge.mixins.json"
+config = "mining_and_placing_animations_neoforge.mixins.json"

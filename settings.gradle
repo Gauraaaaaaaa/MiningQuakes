@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'mining_quakes'
+rootProject.name = 'mining_and_placing_animations'
 
 include 'common'
 include 'fabric'
