@@ -11,63 +11,21 @@ import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
-import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.state.BlockOutlineRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
 
-    @WrapOperation(
-            method = "submitBlockEntities",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher;submit(Lnet/minecraft/client/renderer/blockentity/state/BlockEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V"
-            )
-    )
-    private void onRenderBlockEntities(BlockEntityRenderDispatcher blockEntityRenderDispatcher, BlockEntityRenderState blockEntityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, Operation<Void> original) {
-
-        if (BlockAnimationManager.isBlockInvisible(blockEntityRenderState.blockPos)) {
-
-            BlockAnimation blockAnimation = BlockAnimationManager.getAnimation(blockEntityRenderState.blockPos);
-
-            if (blockAnimation != null) {
-
-                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false)));
-            }
-        }
-
-        original.call(blockEntityRenderDispatcher, blockEntityRenderState, poseStack, submitNodeCollector, cameraRenderState);
-    }
-
-    @WrapOperation(
-            method = "extractVisibleBlockEntities*",
-            at = @At(
-                    value = "NEW",
-                    target = "(ILcom/mojang/blaze3d/vertex/PoseStack$Pose;)Lnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;"
-            )
-    )
-    private ModelFeatureRenderer.CrumblingOverlay onExtractVisibleBlockEntities(int progress, PoseStack.Pose cameraPose, Operation<ModelFeatureRenderer.CrumblingOverlay> original, @Local(ordinal = 0) PoseStack poseStack, @Local(ordinal = 0) BlockPos blockPos) {
-
-        if (BlockAnimationManager.isBlockInvisible(blockPos)) {
-
-            BlockAnimation blockAnimation = BlockAnimationManager.getAnimation(blockPos);
-
-            if (blockAnimation != null) {
-
-                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false)));
-            }
-        }
-
-        return original.call(progress, cameraPose);
-    }
+    @Shadow
+    @Final
+    private Minecraft minecraft;
 
     @WrapOperation(
             method = "renderBlockDestroyAnimation",
@@ -84,7 +42,7 @@ public class LevelRendererMixin {
 
             if (blockAnimation != null) {
 
-                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false)));
+                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(this.minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false)));
             }
         }
 
@@ -92,9 +50,7 @@ public class LevelRendererMixin {
     }
 
     @WrapMethod(method = "renderHitOutline")
-    private void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, double x, double y, double z, BlockOutlineRenderState blockOutlineRenderState, int i, Operation<Void> original) {
-
-        BlockPos blockPos = blockOutlineRenderState.pos();
+    private void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, Entity entity, double x, double y, double z, BlockPos blockPos, BlockState blockState, int i, Operation<Void> original) {
 
         if (BlockAnimationManager.isBlockInvisible(blockPos)) {
 
@@ -110,11 +66,11 @@ public class LevelRendererMixin {
 
                     poseStack.translate(center);
 
-                    blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false)));
+                    blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(this.minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false)));
 
                     poseStack.translate(center.reverse());
 
-                    original.call(poseStack, vertexConsumer, x, y, z, blockOutlineRenderState, i);
+                    original.call(poseStack, vertexConsumer, entity, x, y, z, blockPos, blockState, i);
                 }
             }
             finally {
@@ -124,7 +80,7 @@ public class LevelRendererMixin {
         }
         else {
 
-            original.call(poseStack, vertexConsumer, x, y, z, blockOutlineRenderState, i);
+            original.call(poseStack, vertexConsumer, entity, x, y, z, blockPos, blockState, i);
         }
     }
 }

@@ -32,10 +32,14 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
-//    modRuntimeOnly("maven.modrinth:sodium:mc1.21.10-${project.sodium_version}-fabric")
-//    modRuntimeOnly("maven.modrinth:iris:${project.iris_version}+1.21.10-fabric")
+    modRuntimeOnly("maven.modrinth:sodium:mc1.21.8-${project.sodium_version}-fabric")
+//    modRuntimeOnly("maven.modrinth:iris:${project.iris_version}+1.21.8-fabric")
 //    modRuntimeOnly("org.anarres:jcpp:1.4.14")
 //    modRuntimeOnly("io.github.douira:glsl-transformer:3.0.0-pre3")
+
+    def conditional_mixin = "me.fallenbreath:conditional-mixin-fabric:${project.conditional_mixin}"
+    include(conditional_mixin)
+    modImplementation(conditional_mixin)
 }
 
 processResources {

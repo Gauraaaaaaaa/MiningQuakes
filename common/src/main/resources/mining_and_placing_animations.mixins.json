@@ -1,10 +1,12 @@
 {
   "required": true,
   "package": "com.gaura.mining_and_placing_animations.mixin",
+  "plugin": "com.gaura.mining_and_placing_animations.plugin.MiningAndPlacingAnimationsPlugin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
     "BlockItemMixin",
+    "LevelRendererBlockEntitiesMixin",
     "LevelRendererMixin",
     "MultiPlayerGameModeMixin",
     "iris.ShadowRendererMixin",
