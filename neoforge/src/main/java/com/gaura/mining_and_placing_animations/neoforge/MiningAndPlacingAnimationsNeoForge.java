@@ -5,6 +5,7 @@ import com.gaura.mining_and_placing_animations.animation.BlockAnimationManager;
 import com.gaura.mining_and_placing_animations.animation.data.AnimationResourceManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -60,11 +61,11 @@ public final class MiningAndPlacingAnimationsNeoForge {
     }
 
     @SubscribeEvent
-    public static void onRenderLevel(RenderLevelStageEvent.AfterEntities event) {
+    public static void onRenderLevel(RenderLevelStageEvent event) {
 
         Minecraft minecraft = Minecraft.getInstance();
 
-        if (minecraft.level != null) {
+        if (minecraft.level != null && event.getStage() == RenderLevelStageEvent.Stage.AFTER_ENTITIES) {
 
             MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
             BlockAnimationManager.render(event.getPoseStack(), buffers, minecraft.gameRenderer.getMainCamera(), minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false));

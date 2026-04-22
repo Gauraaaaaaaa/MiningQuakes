@@ -32,8 +32,8 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
-    modRuntimeOnly("maven.modrinth:sodium:mc1.21.8-${project.sodium_version}-fabric")
-//    modRuntimeOnly("maven.modrinth:iris:${project.iris_version}+1.21.8-fabric")
+    modRuntimeOnly("maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-fabric")
+//    modRuntimeOnly("maven.modrinth:iris:${project.iris_version}+${project.minecraft_version}-fabric")
 //    modRuntimeOnly("org.anarres:jcpp:1.4.14")
 //    modRuntimeOnly("io.github.douira:glsl-transformer:3.0.0-pre3")
 

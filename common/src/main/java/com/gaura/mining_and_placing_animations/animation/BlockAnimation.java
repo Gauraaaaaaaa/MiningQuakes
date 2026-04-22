@@ -56,7 +56,7 @@ public class BlockAnimation {
 
         poseStack.pushPose();
 
-        poseStack.translate(this.blockPos.getX() - camera.position().x(), this.blockPos.getY() - camera.position().y(), this.blockPos.getZ() - camera.position().z());
+        poseStack.translate(this.blockPos.getX() - camera.getPosition().x(), this.blockPos.getY() - camera.getPosition().y(), this.blockPos.getZ() - camera.getPosition().z());
 
         this.animationModel.apply(poseStack, this.getProgress(partialTick));
 
