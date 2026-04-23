@@ -5,7 +5,6 @@ import com.gaura.mining_and_placing_animations.animation.BlockAnimationManager;
 import com.gaura.mining_and_placing_animations.animation.data.AnimationResourceManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;

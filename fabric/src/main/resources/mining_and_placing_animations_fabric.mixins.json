@@ -5,8 +5,7 @@
   "minVersion": "0.8",
   "client": [
     "BlockRenderInfoMixin",
-    "SectionCompilerMixin",
-    "TerrainRenderContextMixin"
+    "SectionCompilerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

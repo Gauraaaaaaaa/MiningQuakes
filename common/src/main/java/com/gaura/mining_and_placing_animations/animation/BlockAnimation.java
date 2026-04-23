@@ -7,13 +7,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.List;
 
 public class BlockAnimation {
 
@@ -23,7 +21,8 @@ public class BlockAnimation {
     private boolean alive;
     private final BlockPos blockPos;
     private final BlockState blockState;
-    private final List<BlockModelPart> blockModelParts;
+    private final BakedModel bakedModel;
+    private final RandomSource randomSource;
     private final AnimationModel animationModel;
 
     public BlockAnimation(ClientLevel clientLevel, BlockPos blockPos, BlockState blockState, AnimationModel animationModel) {
@@ -34,7 +33,8 @@ public class BlockAnimation {
         this.alive = true;
         this.blockPos = blockPos;
         this.blockState = blockState;
-        this.blockModelParts = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState).collectParts(RandomSource.create(this.blockState.getSeed(this.blockPos)));
+        this.bakedModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
+        this.randomSource = RandomSource.create();
         this.animationModel = animationModel;
     }
 
@@ -62,12 +62,14 @@ public class BlockAnimation {
 
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateBlock(
                 this.clientLevel,
-                this.blockModelParts,
+                this.bakedModel,
                 this.blockState,
                 this.blockPos,
                 poseStack,
                 multiBufferSource.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType(this.blockState)),
                 false,
+                this.randomSource,
+                this.blockState.getSeed(this.blockPos),
                 OverlayTexture.NO_OVERLAY
         );
 
