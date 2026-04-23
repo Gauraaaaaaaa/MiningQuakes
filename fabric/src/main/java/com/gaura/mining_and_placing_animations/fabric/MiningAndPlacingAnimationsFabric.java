@@ -16,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -40,9 +41,9 @@ public final class MiningAndPlacingAnimationsFabric implements ClientModInitiali
                 }
 
                 @Override
-                public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, Executor executor, Executor executor2) {
+                public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller2, Executor executor, Executor executor2) {
 
-                    return this.animationResourceManager.reload(preparationBarrier, resourceManager, executor, executor2);
+                    return this.animationResourceManager.reload(preparationBarrier, resourceManager, profilerFiller, profilerFiller2, executor, executor2);
                 }
             }
         );
@@ -68,7 +69,7 @@ public final class MiningAndPlacingAnimationsFabric implements ClientModInitiali
                     context.matrixStack(),
                     buffers,
                     minecraft.gameRenderer.getMainCamera(),
-                    minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false)
+                    minecraft.getTimer().getGameTimeDeltaPartialTick(false)
             );
 
             buffers.endBatch();

@@ -7,13 +7,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.spongepowered.asm.mixin.Final;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,19 +22,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LevelRenderer.class)
 public class LevelRendererBlockEntitiesMixin {
 
-    @Shadow
-    @Final
-    private Minecraft minecraft;
-
     @Inject(
-            method = "renderBlockEntities",
+            method = "renderLevel",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V",
+                    ordinal = 0,
                     shift = At.Shift.AFTER
             )
     )
-    private void onRenderBlockEntities(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, MultiBufferSource.BufferSource bufferSource2, Camera camera, float f, CallbackInfo ci, @Local BlockEntity blockEntity) {
+    private void onRenderBlockEntities(DeltaTracker deltaTracker, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci,  @Local(ordinal = 0) PoseStack poseStack, @Local(ordinal = 0) BlockEntity blockEntity) {
 
         if (BlockAnimationManager.isBlockInvisible(blockEntity.getBlockPos())) {
 
@@ -42,7 +39,7 @@ public class LevelRendererBlockEntitiesMixin {
 
             if (blockAnimation != null) {
 
-                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(this.minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false)));
+                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(deltaTracker.getGameTimeDeltaPartialTick(false)));
             }
         }
     }

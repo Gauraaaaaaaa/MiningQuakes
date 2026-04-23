@@ -1,21 +1,21 @@
-package com.gaura.mining_and_placing_animations.mixin.sodium;
+package com.gaura.mining_and_placing_animations.neoforge.mixin.embeddium;
 
 import com.gaura.mining_and_placing_animations.animation.BlockAnimationManager;
 import com.llamalad7.mixinextras.sugar.Local;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockOcclusionCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import org.embeddedt.embeddium.impl.render.chunk.compile.pipeline.BlockOcclusionCache;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Restriction(require = @Condition("sodium"))
-@Mixin(BlockOcclusionCache.class)
+@Restriction(require = @Condition("embeddium"))
+@Mixin(value = BlockOcclusionCache.class, remap = false)
 public class BlockOcclusionCacheMixin {
 
     @Inject(
@@ -23,7 +23,8 @@ public class BlockOcclusionCacheMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/core/BlockPos$MutableBlockPos;set(III)Lnet/minecraft/core/BlockPos$MutableBlockPos;",
-                    shift = At.Shift.AFTER
+                    shift = At.Shift.AFTER,
+                    remap = true
             ),
             cancellable = true
     )

@@ -5,7 +5,10 @@
   "minVersion": "0.8",
   "client": [
     "ModelBlockRendererMixin",
-    "SectionCompilerMixin"
+    "SectionCompilerMixin",
+    "embeddium.BlockOcclusionCacheMixin",
+    "embeddium.BlockRendererMixin",
+    "embeddium.EmbeddiumWorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

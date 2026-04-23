@@ -2,23 +2,26 @@ package com.gaura.mining_and_placing_animations.mixin;
 
 import com.gaura.mining_and_placing_animations.animation.BlockAnimation;
 import com.gaura.mining_and_placing_animations.animation.BlockAnimationManager;
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
@@ -27,14 +30,16 @@ public class LevelRendererMixin {
     @Final
     private Minecraft minecraft;
 
-    @WrapOperation(
-            method = "renderBlockDestroyAnimation",
+    @Inject(
+            method = "renderLevel",
             at = @At(
-                    value = "NEW",
-                    target = "(Lcom/mojang/blaze3d/vertex/VertexConsumer;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;F)Lcom/mojang/blaze3d/vertex/SheetedDecalTextureGenerator;"
+                    value = "INVOKE",
+                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V",
+                    ordinal = 2,
+                    shift = At.Shift.AFTER
             )
     )
-    private SheetedDecalTextureGenerator onRenderBlockDestroyAnimation(VertexConsumer vertexConsumer, PoseStack.Pose pose, float f, Operation<SheetedDecalTextureGenerator> original, @Local(argsOnly = true, ordinal = 0) PoseStack poseStack, @Local(ordinal = 0) BlockPos blockPos) {
+    private void onRenderBlockDestroyAnimation(DeltaTracker deltaTracker, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci, @Local(ordinal = 0) PoseStack poseStack, @Local(ordinal = 0) BlockPos blockPos) {
 
         if (BlockAnimationManager.isBlockInvisible(blockPos)) {
 
@@ -42,45 +47,40 @@ public class LevelRendererMixin {
 
             if (blockAnimation != null) {
 
-                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(this.minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false)));
+                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(deltaTracker.getGameTimeDeltaPartialTick(false)));
             }
         }
-
-        return original.call(vertexConsumer, pose, f);
     }
 
-    @WrapMethod(method = "renderHitOutline")
-    private void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, Entity entity, double x, double y, double z, BlockPos blockPos, BlockState blockState, int i, Operation<Void> original) {
+    @WrapOperation(
+            method = "renderHitOutline",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/LevelRenderer;renderShape(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/shapes/VoxelShape;DDDFFFF)V"
+            )
+    )
+    private void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, VoxelShape voxelShape, double x, double y, double z, float g, float h, float i, float j, Operation<Void> original, @Local(argsOnly = true) BlockPos blockPos) {
 
         if (BlockAnimationManager.isBlockInvisible(blockPos)) {
 
-            poseStack.pushPose();
+            BlockAnimation blockAnimation = BlockAnimationManager.getAnimation(blockPos);
 
-            try {
+            if (blockAnimation != null) {
 
-                BlockAnimation blockAnimation = BlockAnimationManager.getAnimation(blockPos);
+                poseStack.pushPose();
 
-                if (blockAnimation != null) {
+                poseStack.translate(x, y, z);
+                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false)));
+                poseStack.translate(-x, -y, -z);
 
-                    Vec3 center = new Vec3(blockPos.getX() - x, blockPos.getY() - y, blockPos.getZ() - z);
-
-                    poseStack.translate(center);
-
-                    blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(this.minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false)));
-
-                    poseStack.translate(center.reverse());
-
-                    original.call(poseStack, vertexConsumer, entity, x, y, z, blockPos, blockState, i);
-                }
-            }
-            finally {
+                original.call(poseStack, vertexConsumer, voxelShape, x, y, z, g, h, i, j);
 
                 poseStack.popPose();
             }
         }
         else {
 
-            original.call(poseStack, vertexConsumer, entity, x, y, z, blockPos, blockState, i);
+            original.call(poseStack, vertexConsumer, voxelShape, x, y, z, g, h, i, j);
         }
     }
 }

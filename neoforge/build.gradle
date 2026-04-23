@@ -37,6 +37,10 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 
+    def embeddium = "maven.modrinth:embeddium:${project.embeddium_version}+mc${project.minecraft_version}"
+    modCompileOnly(embeddium)
+    modRuntimeOnly(embeddium)
+
     def conditional_mixin = "me.fallenbreath:conditional-mixin-neoforge:${project.conditional_mixin}"
     include(conditional_mixin)
     implementation(conditional_mixin)
