@@ -37,7 +37,7 @@ public final class MiningAndPlacingAnimationsFabric implements ClientModInitiali
                 @Override
                 public ResourceLocation getFabricId() {
 
-                    return ResourceLocation.fromNamespaceAndPath(MiningAndPlacingAnimations.MOD_ID, "animation_loader");
+                    return new ResourceLocation(MiningAndPlacingAnimations.MOD_ID, "animation_loader");
                 }
 
                 @Override
@@ -50,7 +50,7 @@ public final class MiningAndPlacingAnimationsFabric implements ClientModInitiali
 
         FabricLoader.getInstance().getModContainer(MiningAndPlacingAnimations.MOD_ID).ifPresent(container -> {
             ResourceManagerHelper.registerBuiltinResourcePack(
-                    ResourceLocation.fromNamespaceAndPath(MiningAndPlacingAnimations.MOD_ID, "default_animations"),
+                    new ResourceLocation(MiningAndPlacingAnimations.MOD_ID, "default_animations"),
                     container,
                     Component.literal("Default Mining & Placing Animations"),
                     ResourcePackActivationType.DEFAULT_ENABLED
@@ -69,7 +69,7 @@ public final class MiningAndPlacingAnimationsFabric implements ClientModInitiali
                     context.matrixStack(),
                     buffers,
                     minecraft.gameRenderer.getMainCamera(),
-                    minecraft.getTimer().getGameTimeDeltaPartialTick(false)
+                    context.tickDelta()
             );
 
             buffers.endBatch();

@@ -19,9 +19,9 @@ public record AnimationRule(List<String> blocks, @Nullable ResourceLocation mini
             blocks.add(jsonElement.getAsString());
         }
 
-        ResourceLocation miningAnimationId = jsonObject.has("mining_animation") ? ResourceLocation.parse(jsonObject.get("mining_animation").getAsString()) : null;
+        ResourceLocation miningAnimationId = jsonObject.has("mining_animation") ? ResourceLocation.tryParse(jsonObject.get("mining_animation").getAsString()) : null;
 
-        ResourceLocation placingAnimationId = jsonObject.has("placing_animation") ? ResourceLocation.parse(jsonObject.get("placing_animation").getAsString()) : null;
+        ResourceLocation placingAnimationId = jsonObject.has("placing_animation") ? ResourceLocation.tryParse(jsonObject.get("placing_animation").getAsString()) : null;
 
         return new AnimationRule(blocks, miningAnimationId, placingAnimationId);
     }

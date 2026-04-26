@@ -5,9 +5,15 @@
   "minVersion": "0.8",
   "client": [
     "BlockRenderInfoMixin",
-    "SectionCompilerMixin"
+    "LevelRendererMixin",
+    "sodium.BlockOcclusionCacheMixin",
+    "sodium.BlockRendererMixin",
+    "sodium.SodiumWorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "indium.TerrainRenderContextMixin"
+  ]
 }

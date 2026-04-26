@@ -1,9 +1,0 @@
-{
-  "pack": {
-    "pack_format": 34,
-    "supported_formats": [34, 75],
-    "min_format": [34, 0],
-    "max_format": [75, 0],
-    "description": "The default mining and placing animations"
-  }
-}

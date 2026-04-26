@@ -30,7 +30,7 @@ public class AnimationResourceManager implements ResourceManagerReloadListener {
         animationConfig = null;
         ANIMATION_MODELS.clear();
 
-        resourceManager.getResource(ResourceLocation.fromNamespaceAndPath(MiningAndPlacingAnimations.MOD_ID, "animations_config.json")).ifPresent(resource -> {
+        resourceManager.getResource(new ResourceLocation(MiningAndPlacingAnimations.MOD_ID, "animations_config.json")).ifPresent(resource -> {
 
             try (Reader reader = new InputStreamReader(resource.open())) {
 
@@ -56,7 +56,7 @@ public class AnimationResourceManager implements ResourceManagerReloadListener {
                 AnimationModel animationDefinition = AnimationModel.fromJson(GsonHelper.fromJson(GSON, reader, JsonObject.class));
 
                 String path = location.getPath().replace(".json", "");
-                ResourceLocation identifier = ResourceLocation.fromNamespaceAndPath(location.getNamespace(), path);
+                ResourceLocation identifier = new ResourceLocation(location.getNamespace(), path);
 
                 ANIMATION_MODELS.put(identifier, animationDefinition);
             }

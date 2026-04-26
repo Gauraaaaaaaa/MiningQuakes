@@ -2,6 +2,7 @@ package com.gaura.mining_and_placing_animations.animation.data;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -44,7 +45,7 @@ public class AnimationConfig {
     @Nullable
     public ResourceLocation getMiningAnimation(BlockState blockState) {
 
-        String blockId = blockState.getBlockHolder().getRegisteredName();
+        String blockId = BuiltInRegistries.BLOCK.getKey(blockState.getBlock()).getNamespace();
 
         if (this.miningBlacklistByBlock.contains(blockId)) {
 
@@ -78,7 +79,7 @@ public class AnimationConfig {
     @Nullable
     public ResourceLocation getPlacingAnimation(BlockState blockState) {
 
-        String blockId = blockState.getBlockHolder().getRegisteredName();
+        String blockId = BuiltInRegistries.BLOCK.getKey(blockState.getBlock()).getNamespace();
 
         if (this.placingBlacklistByBlock.contains(blockId)) {
 
@@ -120,12 +121,12 @@ public class AnimationConfig {
 
             if (global.has("mining_animation")) {
 
-                globalMiningAnimation = ResourceLocation.parse(global.get("mining_animation").getAsString());
+                globalMiningAnimation = ResourceLocation.tryParse(global.get("mining_animation").getAsString());
             }
 
             if (global.has("placing_animation")) {
 
-                globalPlacingAnimation = ResourceLocation.parse(global.get("placing_animation").getAsString());
+                globalPlacingAnimation = ResourceLocation.tryParse(global.get("placing_animation").getAsString());
             }
         }
 
@@ -146,7 +147,7 @@ public class AnimationConfig {
                     if (blockId.startsWith("#")) {
 
                         String tagId = blockId.substring(1);
-                        TagKey<Block> tagKey = TagKey.create(Registries.BLOCK, ResourceLocation.parse(tagId));
+                        TagKey<Block> tagKey = TagKey.create(Registries.BLOCK, ResourceLocation.tryParse(tagId));
 
                         if (animationRule.miningAnimationId() != null) {
 
@@ -187,7 +188,7 @@ public class AnimationConfig {
                 if (blockId.startsWith("#")) {
 
                     String tagId = blockId.substring(1);
-                    miningBlacklistByTag.add(TagKey.create(Registries.BLOCK, ResourceLocation.parse(tagId)));
+                    miningBlacklistByTag.add(TagKey.create(Registries.BLOCK, ResourceLocation.tryParse(tagId)));
                 }
                 else {
 
@@ -208,7 +209,7 @@ public class AnimationConfig {
                 if (blockOrTag.startsWith("#")) {
 
                     String tagId = blockOrTag.substring(1);
-                    placingBlacklistByTag.add(TagKey.create(Registries.BLOCK, ResourceLocation.parse(tagId)));
+                    placingBlacklistByTag.add(TagKey.create(Registries.BLOCK, ResourceLocation.tryParse(tagId)));
                 }
                 else {
 

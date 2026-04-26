@@ -1,0 +1,50 @@
+package com.gaura.mining_and_placing_animations.mixin;
+
+import com.gaura.mining_and_placing_animations.animation.BlockAnimationManager;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+@Mixin(targets = "net.minecraft.client.renderer.chunk.ChunkRenderDispatcher$RenderChunk$RebuildTask")
+public class RebuildTaskMixin {
+
+    @WrapOperation(
+            method = "compile",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;getRenderShape()Lnet/minecraft/world/level/block/RenderShape;"
+            )
+    )
+    private RenderShape onGetRenderShape(BlockState blockState, Operation<RenderShape> original, @Local(ordinal = 2) BlockPos blockPos) {
+
+        if (original.call(blockState) != RenderShape.INVISIBLE && BlockAnimationManager.isBlockInvisible(blockPos)) {
+
+            return RenderShape.INVISIBLE;
+        }
+
+        return original.call(blockState);
+    }
+
+    @WrapOperation(
+            method = "compile",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;isSolidRender(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Z"
+            )
+    )
+    private boolean onIsSolidRender(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Operation<Boolean> original) {
+
+        if (original.call(blockState, blockGetter, blockPos) && BlockAnimationManager.isBlockInvisible(blockPos)) {
+
+            return false;
+        }
+
+        return original.call(blockState, blockGetter, blockPos);
+    }
+}
