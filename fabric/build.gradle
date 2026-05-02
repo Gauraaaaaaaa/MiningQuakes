@@ -34,15 +34,17 @@ dependencies {
 
     def sodium = "maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-fabric"
     modCompileOnly(sodium)
-    modRuntimeOnly(sodium)
+//    modRuntimeOnly(sodium)
 
-//    modRuntimeOnly("maven.modrinth:iris:${project.iris_version}+${project.minecraft_version}-fabric")
+    def iris = "maven.modrinth:iris:${project.iris_version}+${project.minecraft_version}-fabric"
+    modCompileOnly(iris)
+//    modRuntimeOnly(iris)
 //    modRuntimeOnly("org.anarres:jcpp:1.4.14")
 //    modRuntimeOnly("io.github.douira:glsl-transformer:3.0.0-pre3")
 
     def indium = "maven.modrinth:indium:${project.indium_version}+mc${project.minecraft_version}"
     modCompileOnly(indium)
-    modRuntimeOnly(indium)
+//    modRuntimeOnly(indium)
 
     def conditional_mixin = "me.fallenbreath:conditional-mixin-fabric:${project.conditional_mixin}"
     include(conditional_mixin)

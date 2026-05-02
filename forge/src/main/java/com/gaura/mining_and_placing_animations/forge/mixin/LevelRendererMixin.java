@@ -1,4 +1,4 @@
-package com.gaura.mining_and_placing_animations.fabric.mixin;
+package com.gaura.mining_and_placing_animations.forge.mixin;
 
 import com.gaura.mining_and_placing_animations.animation.BlockAnimation;
 import com.gaura.mining_and_placing_animations.animation.BlockAnimationManager;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Restriction(conflict = @Condition("sodium"))
+@Restriction(conflict = @Condition("embeddium"))
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
 

@@ -62,11 +62,15 @@ public class LevelRendererMixin {
 
                 poseStack.pushPose();
 
-                poseStack.translate(x, y, z);
-                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(tickDelta));
-                poseStack.translate(-x, -y, -z);
+                double offsetX = (double) blockPos.getX() - x;
+                double offsetY = (double) blockPos.getY() - y;
+                double offsetZ = (double) blockPos.getZ() - z;
 
-                original.call(levelRenderer, poseStack, vertexConsumer, entity, x, y, z, blockPos, blockState);
+                poseStack.translate(offsetX, offsetY, offsetZ);
+
+                blockAnimation.getAnimationModel().apply(poseStack, blockAnimation.getProgress(tickDelta));
+
+                original.call(levelRenderer, poseStack, vertexConsumer, entity, (double) blockPos.getX(), (double) blockPos.getY(), (double) blockPos.getZ(), blockPos, blockState);
 
                 poseStack.popPose();
             }

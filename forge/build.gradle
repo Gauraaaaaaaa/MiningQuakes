@@ -5,6 +5,7 @@ plugins {
 loom {
     forge {
         mixinConfig "mining_and_placing_animations.mixins.json"
+        mixinConfig "mining_and_placing_animations_forge.mixins.json"
     }
 }
 
@@ -41,7 +42,7 @@ dependencies {
 
     def embedium = "maven.modrinth:embeddium:${project.embeddium_version}+mc${project.minecraft_version}"
     compileOnly(embedium)
-    runtimeOnly(embedium)
+//    runtimeOnly(embedium)
 
     def conditional_mixin = "me.fallenbreath:conditional-mixin-forge:${project.conditional_mixin}"
     include(conditional_mixin)

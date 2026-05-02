@@ -47,8 +47,8 @@ public class AnimationModel {
 
         float currentTime = progress * this.duration;
 
-        Keyframe from = keyframes.getFirst();
-        Keyframe to = keyframes.getLast();
+        Keyframe from = keyframes.get(0);
+        Keyframe to = keyframes.get(keyframes.size() - 1);
 
         for (int i = 0; i < keyframes.size() - 1; i++) {
 

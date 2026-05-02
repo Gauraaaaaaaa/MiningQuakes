@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "com.gaura.mining_and_placing_animations.forge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [
+    "LevelRendererMixin",
+    "ModelBlockRendererMixin",
+    "embeddium.BlockOcclusionCacheMixin",
+    "embeddium.BlockRendererMixin",
+    "embeddium.SodiumWorldRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,29 +1,28 @@
 modLoader = "javafml"
 loaderVersion = "[47,)"
-#issueTrackerURL = ""
+modURL = "https://modrinth.com/mod/mining_and_placing_animations"
+issueTrackerURL = "https://github.com/Gauraaaaaaaa/MiningAndPlacingAnimations/issues"
 license = "GNU GPL 3.0"
 
 [[mods]]
 modId = "mining_and_placing_animations"
 version = "${version}"
-displayName = "MiningAndPlacingAnimations"
+displayName = "Mining & Placing Animations"
 authors = "Gaura"
-description = '''
-mod test
-'''
-#logoFile = ""
+description = '''Adds customizable animations to blocks when mining and placing! (Mining Quakes successor)'''
+logoFile = "assets/mining_and_placing_animations/icon.png"
 
 [[dependencies.mining_and_placing_animations]]
 modId = "forge"
 mandatory = true
 versionRange = "[47,)"
 ordering = "NONE"
-side = "BOTH"
+side = "CLIENT"
 
 [[dependencies.mining_and_placing_animations]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.20.1,)"
 ordering = "NONE"
-side = "BOTH"
+side = "CLIENT"
 
